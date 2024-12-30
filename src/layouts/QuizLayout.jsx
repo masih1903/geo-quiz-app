@@ -1,7 +1,7 @@
 function QuizLayout() {
     return ( 
         <div>
-            <h1>Quiz Layout</h1>
+            <h1>Quiz Layoutt</h1>
         </div>
      );
 }
