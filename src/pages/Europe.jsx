@@ -1,5 +1,5 @@
 import QuizOverview from "../layouts/QuizOverview";
-import WorldIcon from "../assets/Worlds.png";
+import WorldIcon from "../assets/worlds.png";
 import { useState, useEffect } from "react";
 
 function Europe() {
