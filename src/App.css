@@ -1,0 +1,154 @@
+.land,
+.marker {
+  fill: #f5f5f5; /* Light grey */
+  stroke: black;
+  stroke-width: 1;
+  transition: fill 0.2s ease-in-out;
+}
+
+/* Apply hover effect only for hoverable elements */
+.land.hoverable:hover,
+.marker.hoverable:hover {
+  fill: #a9a9a9; /* Dark grey */
+  cursor: pointer;
+}
+
+/* Guessed countries - no hover */
+.land.guessed,
+.marker.guessed {
+  cursor: default;
+}
+
+.filler_country {
+  fill: #808080;
+  stroke: black;
+  stroke-width: 1;
+}
+
+.country-green {
+  fill: #4caf50;
+}
+
+.country-yellow {
+  fill: #ffeb3b;
+}
+
+.country-redyellow {
+  fill: #ffc107;
+}
+
+.country-red {
+  fill: #f44336;
+}
+
+.quiz-container {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.quiz-controls {
+  margin-bottom: 20px;
+}
+
+.quiz-controls button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.quiz-controls button:hover {
+  background: linear-gradient(90deg, rgba(0, 29, 122, 1), rgba(0, 122, 255, 1), rgba(0, 29, 122, 1));
+  background-size: 200%;
+  animation: shine 1.5s infinite linear;
+  transform: scale(1.05);
+  color: white; /* Optional: to make text more visible */
+  border: none;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 200%;
+  }
+}
+
+
+.quiz-controls button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.map-container {
+  border: 2px solid black;
+  border-radius: 8px;
+  background-color: #87ceeb;
+  width: 85%;
+  margin: 0 auto;
+}
+
+
+.fun-facts {
+  font-family: "Caveat", cursive; /* Quirky and handwritten feel */
+  font-size: 2.8rem; /* Original size retained */
+  color: white;
+  text-align: center;
+  position: relative;
+  margin-top: 10px; /* Moves it closer to the top */
+  padding: 5px;
+  display: inline-block;
+  background: linear-gradient(90deg, white, gray);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  animation: bounce 2s infinite;
+  letter-spacing: 3px;
+  text-transform: capitalize;
+}
+
+.fun-facts::after {
+  content: "";
+  position: absolute;
+  left: 23%; /* Position it relative to the center of the text */
+  transform: translateX(-50%); /* Correct for the element's own width */
+  bottom: -10px; /* Distance from the text */
+  width: 50%; /* Set the underline width (adjust as needed) */
+  height: 3px; /* Thickness of the underline */
+  background: linear-gradient(to right, white, gray, white);
+  border-radius: 10px;
+  animation: wave 3s infinite ease-in-out;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px); /* Keeps original bounce */
+  }
+}
+
+@keyframes wave {
+  0% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(1.5);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+.fun-facts:hover {
+  text-shadow: 3px 3px 10px white, -3px -3px 10px gray;
+  transform: scale(1.1);
+  cursor: pointer;
+}
