@@ -62,7 +62,12 @@
 }
 
 .quiz-controls button:hover {
-  background: linear-gradient(90deg, rgba(0, 29, 122, 1), rgba(0, 122, 255, 1), rgba(0, 29, 122, 1));
+  background: linear-gradient(
+    90deg,
+    rgba(0, 29, 122, 1),
+    rgba(0, 122, 255, 1),
+    rgba(0, 29, 122, 1)
+  );
   background-size: 200%;
   animation: shine 1.5s infinite linear;
   transform: scale(1.05);
@@ -79,7 +84,6 @@
   }
 }
 
-
 .quiz-controls button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
@@ -92,7 +96,6 @@
   width: 85%;
   margin: 0 auto;
 }
-
 
 .fun-facts {
   font-family: "Caveat", cursive; /* Quirky and handwritten feel */
