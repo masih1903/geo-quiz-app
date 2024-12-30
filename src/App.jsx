@@ -33,7 +33,6 @@ import SouthAmericaCapitals from "./pages/south-america-quiz-pages/SouthAmericaC
 import SouthAmericaCountries from "./pages/south-america-quiz-pages/SouthAmericaCountries";
 import SouthAmericaFlags from "./pages/south-america-quiz-pages/SouthAmericaFlags";
 
-
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -57,32 +56,30 @@ function App() {
         <Route path="/africa-capital-quiz" element={<AfricaCapitals />} />
         <Route path="/africa-country-quiz" element={<AfricaCountries />} />
         <Route path="/africa-flag-quiz" element={<AfricaFlags />} />
-        <Route path="/north-america-capital-quiz" element={<NorthAmericaCapitals />} />
-        <Route path="/north-america-country-quiz" element={<NorthAmericaCountries />} />
-        <Route path="/north-america-flag-quiz" element={<NorthAmericaFlags />} />
-        <Route path="/south-america-capital-quiz" element={<SouthAmericaCapitals />} />
-        <Route path="/south-america-country-quiz" element={<SouthAmericaCountries />} />
-        <Route path="/south-america-flag-quiz" element={<SouthAmericaFlags />} />
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
+        <Route
+          path="/north-america-capital-quiz"
+          element={<NorthAmericaCapitals />}
+        />
+        <Route
+          path="/north-america-country-quiz"
+          element={<NorthAmericaCountries />}
+        />
+        <Route
+          path="/north-america-flag-quiz"
+          element={<NorthAmericaFlags />}
+        />
+        <Route
+          path="/south-america-capital-quiz"
+          element={<SouthAmericaCapitals />}
+        />
+        <Route
+          path="/south-america-country-quiz"
+          element={<SouthAmericaCountries />}
+        />
+        <Route
+          path="/south-america-flag-quiz"
+          element={<SouthAmericaFlags />}
+        />
       </Route>
     )
   );
