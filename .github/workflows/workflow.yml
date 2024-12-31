@@ -17,7 +17,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4 # Updated to use the latest version of the action
         with:
-          node-version: '20.x' # Sets up Node.js version 20
+          node-version: "20.x" # Sets up Node.js version 20
 
       - name: Install dependencies
         run: npm install # Installs dependencies defined in package.json.
