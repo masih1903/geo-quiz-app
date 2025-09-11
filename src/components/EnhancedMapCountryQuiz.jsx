@@ -189,8 +189,6 @@ const MainContent = styled.div`
   position: relative;
   overflow: hidden;
   
-  ${props => props.correctFlash && css`animation: ${correctFlash} 0.6s ease-out;`}
-  ${props => props.wrongFlash && css`animation: ${wrongFlash} 0.6s ease-out;`}
 `;
 
 const QuestionSection = styled.div`
@@ -236,7 +234,6 @@ const TimerDisplay = styled.div`
   font-size: var(--text-lg);
   font-weight: 600;
   color: ${props => props.urgent ? 'var(--error-color)' : 'var(--gray-600)'};
-  animation: ${props => props.urgent ? timerPulse : 'none'} 1s infinite;
 `;
 
 const AttemptIndicator = styled.div`
@@ -395,14 +392,6 @@ function EnhancedMapCountryQuiz({
   const [isLoading, setIsLoading] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   
-  // Enhanced features
-  const [questionStartTime, setQuestionStartTime] = useState(null);
-  const [totalTime, setTotalTime] = useState(0);
-  const [currentQuestionTime, setCurrentQuestionTime] = useState(0);
-  const [points, setPoints] = useState(0);
-  const [showCompletionModal, setShowCompletionModal] = useState(false);
-  const [correctFlash, setCorrectFlash] = useState(false);
-  const [wrongFlash, setWrongFlash] = useState(false);
 
   // sizing for the different maps
   const mapStyles = {
@@ -414,17 +403,6 @@ function EnhancedMapCountryQuiz({
     southamerica: { width: "100%", maxWidth: "800px" },
   };
 
-  // Timer effect
-  useEffect(() => {
-    let interval;
-    if (quizActive && currentCountry && questionStartTime) {
-      interval = setInterval(() => {
-        const now = Date.now();
-        setCurrentQuestionTime(Math.floor((now - questionStartTime) / 1000));
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [quizActive, currentCountry, questionStartTime]);
 
   // Fetch country data
   useEffect(() => {
@@ -449,19 +427,6 @@ function EnhancedMapCountryQuiz({
       });
   }, [regionApiUrl]);
 
-  const calculatePoints = (attempts, timeInSeconds) => {
-    let basePoints = 100;
-    
-    // Deduct points for wrong attempts
-    basePoints -= ((attempts - 1) * 25);
-    
-    // Time bonus (faster = more points)
-    if (timeInSeconds <= 5) basePoints += 50;
-    else if (timeInSeconds <= 10) basePoints += 30;
-    else if (timeInSeconds <= 15) basePoints += 10;
-    
-    return Math.max(basePoints, 10); // Minimum 10 points
-  };
 
   const resetQuiz = () => {
     setGuessedCountries([]);
@@ -470,11 +435,6 @@ function EnhancedMapCountryQuiz({
     setMessage("");
     setCurrentCountry(null);
     setQuizActive(false);
-    setQuestionStartTime(null);
-    setTotalTime(0);
-    setCurrentQuestionTime(0);
-    setPoints(0);
-    setShowCompletionModal(false);
   };
 
   const quitQuiz = () => {
@@ -484,14 +444,12 @@ function EnhancedMapCountryQuiz({
     setMessage("You have quit the quiz.");
     setCurrentCountry(null);
     setQuizActive(false);
-    setQuestionStartTime(null);
   };
 
   const drawCountry = () => {
     if (countries.length === guessedCountries.length) {
       setMessage("Bravo! You've completed the quiz!");
       setQuizActive(false);
-      setShowCompletionModal(true);
       return;
     }
 
@@ -508,7 +466,6 @@ function EnhancedMapCountryQuiz({
           setQuizActive(false);
           setIsLoading(false);
           setMessage("Bravo! You've completed the quiz!");
-          setShowCompletionModal(true);
           return latestGuessedCountries;
         }
 
@@ -520,8 +477,6 @@ function EnhancedMapCountryQuiz({
         setCurrentCountry(randomCountry);
         setQuizActive(true);
         setIsLoading(false);
-        setQuestionStartTime(Date.now());
-        setCurrentQuestionTime(0);
 
         return latestGuessedCountries;
       });
@@ -539,24 +494,14 @@ function EnhancedMapCountryQuiz({
       clickedElement.tagName === "circle"
     ) {
       const currentAttempts = (guesses[currentCountry.cca2] || 0) + 1;
-      const questionTime = Math.floor((Date.now() - questionStartTime) / 1000);
 
       if (countryCode === currentCountry.cca2) {
         // Correct guess
-        const earnedPoints = calculatePoints(currentAttempts, questionTime);
-        setPoints(prev => prev + earnedPoints);
-        setTotalTime(prev => prev + questionTime);
-        
-        setCorrectFlash(true);
-        setTimeout(() => setCorrectFlash(false), 600);
-        
         setGuessedCountries((prevGuessedCountries) => [
           ...prevGuessedCountries,
           { 
             cca2: currentCountry.cca2, 
-            attempts: currentAttempts,
-            time: questionTime,
-            points: earnedPoints
+            attempts: currentAttempts
           },
         ]);
 
@@ -565,17 +510,11 @@ function EnhancedMapCountryQuiz({
         setTimeout(() => drawCountry(), 800);
       } else if (currentAttempts >= 4) {
         // Max attempts reached
-        setTotalTime(prev => prev + questionTime);
-        setWrongFlash(true);
-        setTimeout(() => setWrongFlash(false), 600);
-        
         setGuessedCountries((prevGuessedCountries) => [
           ...prevGuessedCountries,
           { 
             cca2: currentCountry.cca2, 
-            attempts: currentAttempts,
-            time: questionTime,
-            points: 0
+            attempts: currentAttempts
           },
         ]);
 
@@ -644,16 +583,6 @@ function EnhancedMapCountryQuiz({
   const totalCountries = countries.length;
   const completedCountries = guessedCountries.length;
   const progressPercentage = totalCountries > 0 ? (completedCountries / totalCountries) * 100 : 0;
-  const correctAnswers = guessedCountries.filter(g => g.attempts <= 4 && g.points > 0).length;
-  const accuracy = completedCountries > 0 ? (correctAnswers / completedCountries) * 100 : 0;
-
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const currentAttempts = currentCountry ? (guesses[currentCountry.cca2] || 0) : 0;
 
   if (isLoading && countries.length === 0) {
     return (
@@ -672,7 +601,7 @@ function EnhancedMapCountryQuiz({
         <Title>{title}</Title>
         <Subtitle>
           {quizActive && currentCountry
-            ? `Click on the country on the map! Faster answers earn more points.`
+            ? `Click on the country on the map!`
             : `Test your geography knowledge with interactive maps!`}
         </Subtitle>
       </Header>
@@ -685,28 +614,6 @@ function EnhancedMapCountryQuiz({
               <div style={{ textAlign: 'center' }}>
                 <QuestionText style={{ fontSize: 'var(--text-lg)', marginBottom: 'var(--space-2)' }}>Find this country:</QuestionText>
                 <CountryDisplay style={{ fontSize: 'var(--text-xl)', marginBottom: 'var(--space-3)' }}>{currentCountry.name}</CountryDisplay>
-                <TimerDisplay urgent={currentQuestionTime > 20}>
-                  ⏱️ {formatTime(currentQuestionTime)}
-                </TimerDisplay>
-                <div style={{ marginTop: 'var(--space-3)' }}>
-                  <p style={{ fontSize: 'var(--text-sm)', color: 'var(--gray-600)', margin: '0 0 var(--space-2) 0', fontWeight: '500' }}>
-                    Attempts: {currentAttempts}/4
-                  </p>
-                  <AttemptIndicator>
-                    {[1, 2, 3, 4].map(attempt => (
-                      <span 
-                        key={attempt} 
-                        style={{
-                          width: '12px',
-                          height: '12px',
-                          borderRadius: '50%',
-                          backgroundColor: attempt <= currentAttempts ? 'var(--error-color)' : 'var(--gray-300)',
-                          transition: 'all var(--transition-fast)'
-                        }}
-                      />
-                    ))}
-                  </AttemptIndicator>
-                </div>
               </div>
             </StatsCard>
           )}
@@ -722,44 +629,16 @@ function EnhancedMapCountryQuiz({
             </p>
           </StatsCard>
 
-          <StatsCard>
-            <StatTitle>🎯 Accuracy</StatTitle>
-            <StatValue>{Math.round(accuracy)}%</StatValue>
-            <p style={{ color: 'var(--gray-600)', fontSize: 'var(--text-sm)', margin: 0 }}>
-              {correctAnswers} correct out of {completedCountries} attempts
-            </p>
-          </StatsCard>
-
-          <StatsCard>
-            <StatTitle>🏆 Points</StatTitle>
-            <StatValue style={{ color: 'var(--success-color)' }}>
-              {points}
-            </StatValue>
-            <p style={{ color: 'var(--gray-600)', fontSize: 'var(--text-sm)', margin: 0 }}>
-              Total points earned
-            </p>
-          </StatsCard>
-
-          <StatsCard>
-            <StatTitle>⏱️ Time</StatTitle>
-            <StatValue style={{ color: 'var(--accent-color)' }}>
-              {formatTime(totalTime + currentQuestionTime)}
-            </StatValue>
-            <p style={{ color: 'var(--gray-600)', fontSize: 'var(--text-sm)', margin: 0 }}>
-              Total time elapsed
-            </p>
-          </StatsCard>
         </Sidebar>
 
-        <MainContent correctFlash={correctFlash} wrongFlash={wrongFlash}>
+        <MainContent>
           {!quizActive && !currentCountry ? (
             <div style={{ textAlign: 'center', padding: 'var(--space-8)' }}>
               <h2 style={{ marginBottom: 'var(--space-6)', color: 'var(--gray-700)' }}>
                 Ready to test your geography knowledge?
               </h2>
               <p style={{ marginBottom: 'var(--space-8)', color: 'var(--gray-600)', fontSize: 'var(--text-lg)' }}>
-                Click on countries on the interactive map. You have 4 attempts per question. 
-                Faster answers earn more points!
+                Click on countries on the interactive map.
               </p>
               <ActionButton primary onClick={drawCountry} disabled={isLoading}>
                 🚀 Start Quiz
@@ -801,43 +680,11 @@ function EnhancedMapCountryQuiz({
           }}
         >
           {quizActive && currentCountry
-            ? `Find: ${currentCountry.name} ${
-                currentAttempts > 0 ? `(Attempt ${currentAttempts + 1}/4)` : "(First Attempt)"
-              }`
+            ? `Find: ${currentCountry.name}`
             : message}
         </FloatingTooltip>
       ) : null}
 
-      {showCompletionModal && (
-        <CompletionModal onClick={() => setShowCompletionModal(false)}>
-          <ModalContent onClick={(e) => e.stopPropagation()}>
-            <ModalTitle>🎉 Quiz Complete!</ModalTitle>
-            <ModalText>
-              Outstanding! You've completed the {title.replace(' Quiz', '')}.
-              <br />
-              <strong>Final Score: {correctAnswers}/{totalCountries}</strong>
-              <br />
-              <strong>Total Points: {points}</strong>
-              <br />
-              <strong>Total Time: {formatTime(totalTime)}</strong>
-              <br />
-              Accuracy: {Math.round(accuracy)}%
-            </ModalText>
-            <ActionButtons>
-              <ActionButton primary onClick={() => {
-                setShowCompletionModal(false);
-                resetQuiz();
-                setTimeout(drawCountry, 100);
-              }}>
-                🎯 Play Again
-              </ActionButton>
-              <ActionButton onClick={() => setShowCompletionModal(false)}>
-                ✨ Close
-              </ActionButton>
-            </ActionButtons>
-          </ModalContent>
-        </CompletionModal>
-      )}
     </QuizContainer>
   );
 }
