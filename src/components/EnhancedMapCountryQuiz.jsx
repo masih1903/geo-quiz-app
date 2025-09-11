@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled, { keyframes, css } from "styled-components";
 import "../App.css";
 
@@ -391,7 +391,9 @@ function EnhancedMapCountryQuiz({
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-  
+  const [savedScrollPosition, setSavedScrollPosition] = useState({ x: 0, y: 0 });
+  const scrollTimeoutRef = useRef(null);
+  const isScrollingRef = useRef(false);
 
   // sizing for the different maps
   const mapStyles = {
@@ -486,6 +488,40 @@ function EnhancedMapCountryQuiz({
   const clickHandler = (event) => {
     if (!quizActive || !currentCountry) return;
 
+    // Prevent any default behavior that might cause scrolling
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Store current scroll position with multiple fallbacks
+    const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+    const scrollX = window.scrollX || window.pageXOffset || document.documentElement.scrollLeft || 0;
+    
+    // Save scroll position to state
+    setSavedScrollPosition({ x: scrollX, y: scrollY });
+    
+    // Set scrolling flag
+    isScrollingRef.current = true;
+
+    // Create a robust function to preserve scroll position
+    const preserveScrollPosition = () => {
+      // Multiple methods to ensure scroll position is maintained
+      window.scrollTo({ top: scrollY, left: scrollX, behavior: 'instant' });
+      
+      // Fallback methods
+      requestAnimationFrame(() => {
+        window.scrollTo(scrollX, scrollY);
+        document.documentElement.scrollTop = scrollY;
+        document.documentElement.scrollLeft = scrollX;
+        document.body.scrollTop = scrollY;
+        document.body.scrollLeft = scrollX;
+      });
+      
+      // Additional safety net
+      setTimeout(() => {
+        window.scrollTo({ top: scrollY, left: scrollX, behavior: 'instant' });
+      }, 10);
+    };
+
     const clickedElement = event.target;
     const countryCode = clickedElement.id.toLowerCase().replace("-marker", "");
 
@@ -506,8 +542,19 @@ function EnhancedMapCountryQuiz({
         ]);
 
         setGuesses((prev) => ({ ...prev, [currentCountry.cca2]: 0 }));
-        setTimeout(() => setQuizActive(false), 300);
-        setTimeout(() => drawCountry(), 800);
+        
+        // Preserve scroll position immediately and after each state update
+        preserveScrollPosition();
+        
+        setTimeout(() => {
+          setQuizActive(false);
+          preserveScrollPosition();
+        }, 300);
+        
+        setTimeout(() => {
+          drawCountry();
+          preserveScrollPosition();
+        }, 800);
       } else if (currentAttempts >= 4) {
         // Max attempts reached
         setGuessedCountries((prevGuessedCountries) => [
@@ -520,9 +567,20 @@ function EnhancedMapCountryQuiz({
 
         setGuesses((prev) => ({ ...prev, [currentCountry.cca2]: 0 }));
         setMessage(`The correct answer was ${currentCountry.name}.`);
-        setTimeout(() => setMessage(""), 2000);
+        
+        preserveScrollPosition();
+        
+        setTimeout(() => {
+          setMessage("");
+          preserveScrollPosition();
+        }, 2000);
+        
         setQuizActive(false);
-        setTimeout(() => drawCountry(), 2000);
+        
+        setTimeout(() => {
+          drawCountry();
+          preserveScrollPosition();
+        }, 2000);
       } else {
         // Incorrect guess
         setGuesses((prev) => ({
@@ -530,14 +588,23 @@ function EnhancedMapCountryQuiz({
           [currentCountry.cca2]: currentAttempts,
         }));
         setMessage(`Wrong! Try again. Attempt ${currentAttempts}/4.`);
-        setTimeout(() => setMessage(""), 2000);
+        
+        preserveScrollPosition();
+        
+        setTimeout(() => {
+          setMessage("");
+          preserveScrollPosition();
+        }, 2000);
+        
         setTemporaryColors((prev) => ({ ...prev, [countryCode]: true }));
+        
         setTimeout(() => {
           setTemporaryColors((prev) => {
             const updated = { ...prev };
             delete updated[countryCode];
             return updated;
           });
+          preserveScrollPosition();
         }, 1000);
       }
     }
@@ -579,6 +646,69 @@ function EnhancedMapCountryQuiz({
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
+
+  // Maintain scroll position during state updates with debouncing
+  useEffect(() => {
+    if (savedScrollPosition.x !== 0 || savedScrollPosition.y !== 0) {
+      // Clear any existing timeout
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      
+      // Set flag to prevent scroll event interference
+      isScrollingRef.current = true;
+      
+      // Immediate scroll restoration
+      window.scrollTo({ 
+        top: savedScrollPosition.y, 
+        left: savedScrollPosition.x, 
+        behavior: 'instant' 
+      });
+      
+      // Additional restoration after a short delay to handle any async updates
+      scrollTimeoutRef.current = setTimeout(() => {
+        window.scrollTo({ 
+          top: savedScrollPosition.y, 
+          left: savedScrollPosition.x, 
+          behavior: 'instant' 
+        });
+        isScrollingRef.current = false;
+      }, 50);
+    }
+  }, [guessedCountries, guesses, temporaryColors, message, quizActive, currentCountry]);
+
+  // Prevent unwanted scroll events during quiz interactions
+  useEffect(() => {
+    const preventUnwantedScroll = (event) => {
+      if (isScrollingRef.current && quizActive) {
+        event.preventDefault();
+        return false;
+      }
+    };
+
+    const handleScroll = () => {
+      if (isScrollingRef.current) {
+        window.scrollTo({ 
+          top: savedScrollPosition.y, 
+          left: savedScrollPosition.x, 
+          behavior: 'instant' 
+        });
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: false });
+    window.addEventListener('wheel', preventUnwantedScroll, { passive: false });
+    window.addEventListener('touchmove', preventUnwantedScroll, { passive: false });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('wheel', preventUnwantedScroll);
+      window.removeEventListener('touchmove', preventUnwantedScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, [quizActive, savedScrollPosition]);
 
   const totalCountries = countries.length;
   const completedCountries = guessedCountries.length;
