@@ -122,11 +122,19 @@ const Sidebar = styled.div`
   flex-direction: column;
   gap: var(--space-6);
   animation: ${fadeIn} 0.8s ease-out 0.2s both;
+  position: sticky;
+  top: var(--space-6);
+  align-self: flex-start;
+  max-height: calc(100vh - var(--space-12));
+  overflow-y: auto;
   
   @media (max-width: 1200px) {
     order: -1;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    position: static;
+    max-height: none;
+    overflow-y: visible;
   }
 `;
 
@@ -338,11 +346,38 @@ const ModalContent = styled.div`
   background: var(--white);
   border-radius: var(--radius-2xl);
   padding: var(--space-8);
-  max-width: 500px;
+  max-width: 600px;
   width: 90%;
   text-align: center;
   box-shadow: var(--shadow-xl);
   animation: ${pulse} 0.6s ease-out;
+`;
+
+const ModalStats = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--space-4);
+  margin: var(--space-6) 0;
+  padding: var(--space-4);
+  background: var(--gray-50);
+  border-radius: var(--radius-lg);
+`;
+
+const ModalStatItem = styled.div`
+  text-align: center;
+`;
+
+const ModalStatValue = styled.div`
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: ${props => props.color || 'var(--primary-color)'};
+  margin-bottom: var(--space-1);
+`;
+
+const ModalStatLabel = styled.div`
+  font-size: var(--text-sm);
+  color: var(--gray-600);
+  font-weight: 500;
 `;
 
 const ModalTitle = styled.h2`
@@ -392,8 +427,12 @@ function EnhancedMapCountryQuiz({
   const [isLoading, setIsLoading] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [savedScrollPosition, setSavedScrollPosition] = useState({ x: 0, y: 0 });
+  const [startTime, setStartTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
   const scrollTimeoutRef = useRef(null);
   const isScrollingRef = useRef(false);
+  const timerRef = useRef(null);
 
   // sizing for the different maps
   const mapStyles = {
@@ -437,6 +476,12 @@ function EnhancedMapCountryQuiz({
     setMessage("");
     setCurrentCountry(null);
     setQuizActive(false);
+    setStartTime(null);
+    setElapsedTime(0);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
   };
 
   const quitQuiz = () => {
@@ -446,43 +491,75 @@ function EnhancedMapCountryQuiz({
     setMessage("You have quit the quiz.");
     setCurrentCountry(null);
     setQuizActive(false);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
   };
 
   const drawCountry = () => {
     if (countries.length === guessedCountries.length) {
       setMessage("Bravo! You've completed the quiz!");
       setQuizActive(false);
+      // Stop timer immediately
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      // Show completion modal
+      setShowCompletionModal(true);
       return;
     }
 
     setIsLoading(true);
 
-    setTimeout(() => {
-      setGuessedCountries((latestGuessedCountries) => {
-        const remainingCountries = countries.filter(
-          (country) =>
-            !latestGuessedCountries.some((g) => g.cca2 === country.cca2)
-        );
+    // Remove delay - execute immediately
+    setGuessedCountries((latestGuessedCountries) => {
+      const remainingCountries = countries.filter(
+        (country) =>
+          !latestGuessedCountries.some((g) => g.cca2 === country.cca2)
+      );
 
-        if (remainingCountries.length === 0) {
-          setQuizActive(false);
-          setIsLoading(false);
-          setMessage("Bravo! You've completed the quiz!");
-          return latestGuessedCountries;
-        }
-
-        const randomCountry =
-          remainingCountries[
-            Math.floor(Math.random() * remainingCountries.length)
-          ];
-
-        setCurrentCountry(randomCountry);
-        setQuizActive(true);
+      if (countries.length === latestGuessedCountries.length) {
+        setQuizActive(false);
         setIsLoading(false);
-
+        setMessage("Bravo! You've completed the quiz!");
+        // Stop timer immediately
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+        }
+        // Show completion modal
+        setShowCompletionModal(true);
         return latestGuessedCountries;
-      });
-    }, 300);
+      }
+
+      const randomCountry =
+        remainingCountries[
+          Math.floor(Math.random() * remainingCountries.length)
+        ];
+
+      setCurrentCountry(randomCountry);
+      setQuizActive(true);
+      setIsLoading(false);
+      
+      // Start timer if this is the first question
+      if (latestGuessedCountries.length === 0) {
+        const now = Date.now();
+        setStartTime(now);
+        setElapsedTime(0);
+        
+        // Start the timer interval
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+        }
+        timerRef.current = setInterval(() => {
+          setElapsedTime(Date.now() - now);
+        }, 1000);
+      }
+
+      return latestGuessedCountries;
+    });
   };
 
   const clickHandler = (event) => {
@@ -533,38 +610,48 @@ function EnhancedMapCountryQuiz({
 
       if (countryCode === currentCountry.cca2) {
         // Correct guess
-        setGuessedCountries((prevGuessedCountries) => [
-          ...prevGuessedCountries,
+        const newGuessedCountries = [
+          ...guessedCountries,
           { 
             cca2: currentCountry.cca2, 
             attempts: currentAttempts
           },
-        ]);
-
+        ];
+        
+        setGuessedCountries(newGuessedCountries);
         setGuesses((prev) => ({ ...prev, [currentCountry.cca2]: 0 }));
         
         // Preserve scroll position immediately and after each state update
         preserveScrollPosition();
         
-        setTimeout(() => {
+        // Check if quiz is complete
+        if (newGuessedCountries.length === countries.length) {
           setQuizActive(false);
-          preserveScrollPosition();
-        }, 300);
-        
-        setTimeout(() => {
+          setMessage("Bravo! You've completed the quiz!");
+          // Stop timer immediately
+          if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+          }
+          // Show completion modal
+          setShowCompletionModal(true);
+        } else {
+          // Immediately move to next question without delay
+          setQuizActive(false);
           drawCountry();
-          preserveScrollPosition();
-        }, 800);
+        }
+        preserveScrollPosition();
       } else if (currentAttempts >= 4) {
         // Max attempts reached
-        setGuessedCountries((prevGuessedCountries) => [
-          ...prevGuessedCountries,
+        const newGuessedCountries = [
+          ...guessedCountries,
           { 
             cca2: currentCountry.cca2, 
             attempts: currentAttempts
           },
-        ]);
-
+        ];
+        
+        setGuessedCountries(newGuessedCountries);
         setGuesses((prev) => ({ ...prev, [currentCountry.cca2]: 0 }));
         setMessage(`The correct answer was ${currentCountry.name}.`);
         
@@ -578,7 +665,19 @@ function EnhancedMapCountryQuiz({
         setQuizActive(false);
         
         setTimeout(() => {
-          drawCountry();
+          // Check if quiz is complete
+          if (newGuessedCountries.length === countries.length) {
+            setMessage("Bravo! You've completed the quiz!");
+            // Stop timer immediately
+            if (timerRef.current) {
+              clearInterval(timerRef.current);
+              timerRef.current = null;
+            }
+            // Show completion modal
+            setShowCompletionModal(true);
+          } else {
+            drawCountry();
+          }
           preserveScrollPosition();
         }, 2000);
       } else {
@@ -714,6 +813,23 @@ function EnhancedMapCountryQuiz({
   const completedCountries = guessedCountries.length;
   const progressPercentage = totalCountries > 0 ? (completedCountries / totalCountries) * 100 : 0;
 
+  // Format elapsed time for display
+  const formatTime = (milliseconds) => {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  // Cleanup timer on component unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
+
   if (isLoading && countries.length === 0) {
     return (
       <QuizContainer>
@@ -748,6 +864,25 @@ function EnhancedMapCountryQuiz({
             </StatsCard>
           )}
 
+          {(quizActive || completedCountries > 0) && (
+            <StatsCard>
+              <StatTitle>⏱️ Timer</StatTitle>
+              <StatValue>
+                {formatTime(elapsedTime)}
+              </StatValue>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'var(--space-2)' }}>
+                <span style={{ color: 'var(--gray-600)', fontSize: 'var(--text-sm)' }}>
+                  {quizActive ? 'Quiz in Progress' : 'Quiz Completed'}
+                </span>
+                {quizActive && currentCountry && (
+                  <span style={{ color: 'var(--primary-color)', fontSize: 'var(--text-sm)', fontWeight: '600' }}>
+                    Attempt: {(guesses[currentCountry.cca2] || 0) + 1}/4
+                  </span>
+                )}
+              </div>
+            </StatsCard>
+          )}
+
           <StatsCard>
             <StatTitle>📊 Progress</StatTitle>
             <StatValue>{completedCountries}/{totalCountries}</StatValue>
@@ -757,6 +892,53 @@ function EnhancedMapCountryQuiz({
             <p style={{ color: 'var(--gray-600)', fontSize: 'var(--text-sm)', margin: 0 }}>
               {Math.round(progressPercentage)}% Complete
             </p>
+          </StatsCard>
+
+          <StatsCard>
+            <StatTitle>⭐ Performance</StatTitle>
+            <StatValue>
+              {guessedCountries.length > 0 
+                ? Math.round((guessedCountries.filter(c => c.attempts === 1).length / guessedCountries.length) * 100)
+                : 0}%
+            </StatValue>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'var(--space-2)' }}>
+              <span style={{ color: 'var(--gray-600)', fontSize: 'var(--text-sm)' }}>First Try Success</span>
+              <span style={{ color: 'var(--success-color)', fontSize: 'var(--text-sm)', fontWeight: '600' }}>
+                {guessedCountries.filter(c => c.attempts === 1).length} perfect
+              </span>
+            </div>
+          </StatsCard>
+
+          <StatsCard>
+            <StatTitle>🎯 Accuracy</StatTitle>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-3)' }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 'var(--text-lg)', fontWeight: '700', color: 'var(--success-color)' }}>
+                  {guessedCountries.filter(c => c.attempts === 1).length}
+                </div>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--gray-600)' }}>Perfect</div>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 'var(--text-lg)', fontWeight: '700', color: 'var(--warning-color)' }}>
+                  {guessedCountries.filter(c => c.attempts > 1 && c.attempts < 4).length}
+                </div>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--gray-600)' }}>Good</div>
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-3)', marginTop: 'var(--space-2)' }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 'var(--text-lg)', fontWeight: '700', color: 'var(--error-color)' }}>
+                  {guessedCountries.filter(c => c.attempts >= 4).length}
+                </div>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--gray-600)' }}>Missed</div>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 'var(--text-lg)', fontWeight: '700', color: 'var(--primary-color)' }}>
+                  {totalCountries - completedCountries}
+                </div>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--gray-600)' }}>Remaining</div>
+              </div>
+            </div>
           </StatsCard>
 
         </Sidebar>
@@ -814,6 +996,71 @@ function EnhancedMapCountryQuiz({
             : message}
         </FloatingTooltip>
       ) : null}
+
+      {showCompletionModal && (
+        <CompletionModal onClick={() => setShowCompletionModal(false)}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalTitle>🎉 Quiz Complete!</ModalTitle>
+            <ModalText>
+              Congratulations! You've completed the {title.toLowerCase()}!
+            </ModalText>
+            
+            <ModalStats>
+              <ModalStatItem>
+                <ModalStatValue>{formatTime(elapsedTime)}</ModalStatValue>
+                <ModalStatLabel>Total Time</ModalStatLabel>
+              </ModalStatItem>
+              
+              <ModalStatItem>
+                <ModalStatValue>{completedCountries}/{totalCountries}</ModalStatValue>
+                <ModalStatLabel>Countries</ModalStatLabel>
+              </ModalStatItem>
+              
+              <ModalStatItem>
+                <ModalStatValue color="var(--success-color)">
+                  {guessedCountries.length > 0 
+                    ? Math.round((guessedCountries.filter(c => c.attempts === 1).length / guessedCountries.length) * 100)
+                    : 0}%
+                </ModalStatValue>
+                <ModalStatLabel>First Try Success</ModalStatLabel>
+              </ModalStatItem>
+              
+              <ModalStatItem>
+                <ModalStatValue color="var(--success-color)">
+                  {guessedCountries.filter(c => c.attempts === 1).length}
+                </ModalStatValue>
+                <ModalStatLabel>Perfect</ModalStatLabel>
+              </ModalStatItem>
+              
+              <ModalStatItem>
+                <ModalStatValue color="var(--warning-color)">
+                  {guessedCountries.filter(c => c.attempts > 1 && c.attempts < 4).length}
+                </ModalStatValue>
+                <ModalStatLabel>Good</ModalStatLabel>
+              </ModalStatItem>
+              
+              <ModalStatItem>
+                <ModalStatValue color="var(--error-color)">
+                  {guessedCountries.filter(c => c.attempts >= 4).length}
+                </ModalStatValue>
+                <ModalStatLabel>Missed</ModalStatLabel>
+              </ModalStatItem>
+            </ModalStats>
+            
+            <ActionButtons>
+              <ActionButton primary onClick={() => {
+                setShowCompletionModal(false);
+                resetQuiz();
+              }}>
+                🎯 Play Again
+              </ActionButton>
+              <ActionButton onClick={() => setShowCompletionModal(false)}>
+                ✅ Close
+              </ActionButton>
+            </ActionButtons>
+          </ModalContent>
+        </CompletionModal>
+      )}
 
     </QuizContainer>
   );
