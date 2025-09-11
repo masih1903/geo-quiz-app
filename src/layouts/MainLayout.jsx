@@ -3,80 +3,133 @@ import styled from "styled-components";
 import HomeIcon from "../SvgComponents/HomeIcon";
 
 const Container = styled.div`
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  min-height: 100vh; /* Sørger for at fylde hele vinduet */
+  min-height: 100vh;
+  background-color: var(--gray-50);
 `;
 
 const StyledHeader = styled.header`
-  background-color: rgb(0, 0, 0);
-  color: #ffffff;
-  padding: 0.5rem 1rem; /* Reducér header-størrelse */
+  background: linear-gradient(135deg, var(--white) 0%, var(--gray-100) 100%);
+  border-bottom: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-4) var(--space-6);
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 1000;
-  margin-bottom: 12px;
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(8px);
 
   @media (max-width: 768px) {
     flex-direction: column;
-    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-4);
   }
 `;
 
 const Nav = styled.nav`
   ul {
-    display: flex; /* Gør links horisontale */
-    flex-wrap: wrap; /* Tillad menupunkterne at bryde til næste linje */
-    list-style: none; /* Fjern punkttegn */
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    list-style: none;
+    margin: 0;
+    padding: 0;
 
     @media (max-width: 768px) {
-      justify-content: center; /* Centrer menupunkterne på små skærme */
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-4);
     }
   }
 
   li {
-    margin: 0 0.8rem; /* Giv mellemrum mellem links */
+    display: flex;
+    align-items: center;
   }
 
   a {
-    text-decoration: none; /* Fjern understregning */
-    color: white;
-    font-size: 1.5rem;
+    text-decoration: none;
+    color: var(--gray-700);
+    font-size: var(--text-base);
+    font-weight: 600;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-fast);
+    position: relative;
 
     &:hover {
-      text-decoration: underline; /* Understreg ved hover */
+      color: var(--primary-color);
+      background-color: var(--primary-light);
+      transform: translateY(-1px);
+    }
+
+    &.active {
+      color: var(--primary-color);
+      background-color: var(--primary-light);
+    }
+
+    @media (max-width: 768px) {
+      font-size: var(--text-sm);
+      padding: var(--space-2) var(--space-3);
     }
   }
 `;
 
 const StyledFooter = styled.footer`
-  background-color: rgb(0, 0, 0);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--gray-800) 0%, var(--gray-900) 100%);
+  color: var(--white);
   text-align: center;
-  margin-top: 15px;
-  padding: 0.1px;
+  margin-top: auto;
+  padding: var(--space-6);
+  font-size: var(--text-sm);
 `;
 
 const Logo = styled.img`
-  height: 7rem;
+  height: 4rem;
   cursor: pointer;
-  transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth hover effect */
+  transition: all var(--transition-normal);
+  border-radius: var(--radius-lg);
 
   &:hover {
-    transform: scale(1.1); /* Slightly increase size */
-    opacity: 0.8; /* Slightly reduce opacity */
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+  }
+
+  @media (max-width: 768px) {
+    height: 3rem;
+  }
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+`;
+
+const BrandText = styled.span`
+  font-family: var(--font-family-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--gray-900);
+  
+  @media (max-width: 768px) {
+    font-size: var(--text-lg);
   }
 `;
 
 function MainLayout() {
   return (
-    <>
-      {" "}
+    <Container>
       <StyledHeader>
-        <NavLink to="/">
-          <Logo src="/Atlaslogoblackcopy.png" alt="Atlas Logo" />
-        </NavLink>
+        <LogoContainer>
+          <NavLink to="/">
+            <Logo src="/Atlaslogoblackcopy.png" alt="Atlas Logo" />
+          </NavLink>
+          <BrandText>Atlas Quiz</BrandText>
+        </LogoContainer>
         <Nav>
           <ul>
             <li>
@@ -105,9 +158,9 @@ function MainLayout() {
       </StyledHeader>
       <Outlet />
       <StyledFooter>
-        <p>© {new Date().getFullYear()} Atlas Quiz.</p>{" "}
+        <p>© {new Date().getFullYear()} Atlas Quiz - Explore the World Through Geography</p>
       </StyledFooter>
-    </>
+    </Container>
   );
 }
 

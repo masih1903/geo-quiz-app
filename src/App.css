@@ -1,16 +1,19 @@
+/* Map Styles - Enhanced with modern colors */
 .land,
 .marker {
-  fill: #f5f5f5; /* Light grey */
-  stroke: black;
+  fill: var(--gray-100);
+  stroke: var(--gray-400);
   stroke-width: 1;
-  transition: fill 0.2s ease-in-out;
+  transition: all var(--transition-fast);
 }
 
 /* Apply hover effect only for hoverable elements */
 .land.hoverable:hover,
 .marker.hoverable:hover {
-  fill: #a9a9a9; /* Dark grey */
+  fill: var(--gray-300);
   cursor: pointer;
+  stroke: var(--primary-color);
+  stroke-width: 2;
 }
 
 /* Guessed countries - no hover */
@@ -20,138 +23,176 @@
 }
 
 .filler_country {
-  fill: #808080;
-  stroke: black;
+  fill: var(--gray-400);
+  stroke: var(--gray-600);
   stroke-width: 1;
 }
 
+/* Modern quiz result colors */
 .country-green {
-  fill: #4caf50;
+  fill: var(--success-color);
 }
 
 .country-yellow {
-  fill: #ffeb3b;
+  fill: var(--warning-color);
 }
 
 .country-redyellow {
-  fill: #ffc107;
+  fill: #fb923c;
 }
 
 .country-red {
-  fill: #f44336;
+  fill: var(--error-color);
 }
 
+/* Modern Quiz Container */
 .quiz-container {
   text-align: center;
-  font-family: Arial, sans-serif;
+  font-family: var(--font-family-sans);
+  padding: var(--space-8) 0;
 }
 
 .quiz-controls {
-  margin-bottom: 20px;
+  margin-bottom: var(--space-8);
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
+/* Modern Quiz Buttons */
 .quiz-controls button {
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: var(--space-4) var(--space-6);
+  font-size: var(--text-base);
+  font-weight: 600;
   cursor: pointer;
-  background-color: black;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--white);
   border: none;
-  border-radius: 5px;
-  transition: background-color 0.3s, transform 0.2s;
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
 }
 
-.quiz-controls button:hover {
-  background: linear-gradient(
-    90deg,
-    rgba(0, 29, 122, 1),
-    rgba(0, 122, 255, 1),
-    rgba(0, 29, 122, 1)
-  );
-  background-size: 200%;
-  animation: shine 1.5s infinite linear;
-  transform: scale(1.05);
-  color: white; /* Optional: to make text more visible */
-  border: none;
-}
-
-@keyframes shine {
-  0% {
-    background-position: 0%;
-  }
-  100% {
-    background-position: 200%;
-  }
+.quiz-controls button:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .quiz-controls button:disabled {
-  background-color: #cccccc;
+  background-color: var(--gray-400);
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
+/* Modern Map Container */
 .map-container {
-  border: 2px solid black;
-  border-radius: 8px;
-  background-color: #87ceeb;
-  width: 85%;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%);
+  width: 90%;
+  max-width: 1200px;
   margin: 0 auto;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
 }
 
+/* Modern Fun Facts Section */
 .fun-facts {
-  font-family: "Caveat", cursive; /* Quirky and handwritten feel */
-  font-size: 2.8rem; /* Original size retained */
-  color: white;
+  font-family: var(--font-family-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--primary-color);
   text-align: center;
   position: relative;
-  margin-top: 10px; /* Moves it closer to the top */
-  padding: 5px;
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-6);
+  padding: var(--space-2);
   display: inline-block;
-  background: linear-gradient(90deg, white, gray);
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-  animation: bounce 2s infinite;
-  letter-spacing: 3px;
+  text-shadow: none;
+  animation: gentle-bounce 3s ease-in-out infinite;
+  letter-spacing: 1px;
   text-transform: capitalize;
 }
 
 .fun-facts::after {
   content: "";
   position: absolute;
-  left: 23%; /* Position it relative to the center of the text */
-  transform: translateX(-50%); /* Correct for the element's own width */
-  bottom: -10px; /* Distance from the text */
-  width: 50%; /* Set the underline width (adjust as needed) */
-  height: 3px; /* Thickness of the underline */
-  background: linear-gradient(to right, white, gray, white);
-  border-radius: 10px;
-  animation: wave 3s infinite ease-in-out;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -8px;
+  width: 60%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
+  border-radius: var(--radius-sm);
+  animation: gentle-wave 4s ease-in-out infinite;
 }
 
-@keyframes bounce {
-  0%,
-  100% {
+@keyframes gentle-bounce {
+  0%, 100% {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px); /* Keeps original bounce */
+    transform: translateY(-5px);
   }
 }
 
-@keyframes wave {
-  0% {
-    transform: scaleX(1);
+@keyframes gentle-wave {
+  0%, 100% {
+    transform: translateX(-50%) scaleX(1);
   }
   50% {
-    transform: scaleX(1.5);
-  }
-  100% {
-    transform: scaleX(1);
+    transform: translateX(-50%) scaleX(1.2);
   }
 }
 
 .fun-facts:hover {
-  text-shadow: 3px 3px 10px white, -3px -3px 10px gray;
-  transform: scale(1.1);
+  animation-play-state: paused;
+  transform: scale(1.05);
   cursor: pointer;
+}
+
+/* Quiz Message Styles */
+.quiz-message-container {
+  min-height: var(--space-8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-4);
+}
+
+.quiz-message {
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+}
+
+.quiz-active-message {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.quiz-end-message {
+  background-color: var(--success-color);
+  color: var(--white);
+}
+
+/* Quiz Question Tooltip */
+.quiz-question {
+  background: var(--white) !important;
+  border: 2px solid var(--primary-color) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-xl) !important;
+  font-family: var(--font-family-sans) !important;
+  font-size: var(--text-sm) !important;
+  font-weight: 600 !important;
+  color: var(--gray-900) !important;
 }

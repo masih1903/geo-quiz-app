@@ -1,120 +1,188 @@
 import QuizOverview from "../layouts/QuizOverview";
 import WorldIcon from "../assets/worlds.png";
+import styled from "styled-components";
 import { useState, useEffect } from "react";
+
+const PageContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-8);
+  padding: var(--space-8);
+  min-height: 60vh;
+  align-items: start;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    padding: var(--space-4);
+  }
+`;
+
+const FactsSection = styled.div`
+  background: var(--white);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--gray-200);
+`;
+
+const FactsTitle = styled.h2`
+  font-family: var(--font-family-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    border-radius: var(--radius-sm);
+  }
+`;
+
+const FactsText = styled.div`
+  font-family: var(--font-family-sans);
+  font-size: var(--text-base);
+  line-height: 1.8;
+  color: var(--gray-700);
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  
+  @media (max-width: 768px) {
+    font-size: var(--text-sm);
+  }
+`;
+
+const QuizSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+`;
+
+const PageTitle = styled.h1`
+  font-family: var(--font-family-display);
+  font-size: var(--text-4xl);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  margin: 0;
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    opacity: 0;
+    border-radius: var(--radius-xl);
+    transition: opacity var(--transition-normal);
+    z-index: -1;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    
+    &::before {
+      opacity: 0.1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    font-size: var(--text-3xl);
+  }
+`;
+
+const ContinentImage = styled.img`
+  width: 280px;
+  height: 280px;
+  object-fit: contain;
+  margin-bottom: var(--space-6);
+  border-radius: 50%;
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-normal);
+
+  &:hover {
+    transform: rotate(5deg) scale(1.05);
+    box-shadow: var(--shadow-xl);
+  }
+
+  @media (max-width: 768px) {
+    width: 200px;
+    height: 200px;
+  }
+`;
 
 function Europe() {
   const [hover, setHover] = useState(false);
-  const [text, setText] = useState(""); // State for the typed text
+  const [text, setText] = useState("");
 
-  const fullText = `
-  - Did you know that the Eiffel Tower in Paris grows taller in the summer? The metal expands in the heat, making it about 15 cm (6 inches) taller!
-  - Did you know that Iceland has no mosquitoes? Despite its mild summers, the country is entirely mosquito-free.
-  - Did you know that Europe is home to the world’s oldest sovereign state? San Marino, founded in 301 AD, claims to be the oldest republic in the world.
-  - Did you know that Finland has over 188,000 lakes, making it the country with the most lakes in Europe?`.trim();
+  const fullText = `- Did you know that the Eiffel Tower in Paris grows taller in the summer? The metal expands in the heat, making it about 15 cm (6 inches) taller!
+
+- Did you know that Iceland has no mosquitoes? Despite its mild summers, the country is entirely mosquito-free.
+
+- Did you know that Europe is home to the world's oldest sovereign state? San Marino, founded in 301 AD, claims to be the oldest republic in the world.
+
+- Did you know that Finland has over 188,000 lakes, making it the country with the most lakes in Europe?`;
 
   useEffect(() => {
     let index = 0;
 
     const interval = setInterval(() => {
       if (index < fullText.length) {
-        // Only append if the current character is defined
         const nextChar = fullText[index];
         if (nextChar !== undefined) {
           setText((prev) => prev + nextChar);
         }
         index++;
       } else {
-        clearInterval(interval); // Stop the interval when done
+        clearInterval(interval);
       }
-    }, 30); // Adjust typing speed here
+    }, 30);
 
-    return () => clearInterval(interval); // Cleanup interval on component unmount
+    return () => clearInterval(interval);
   }, [fullText]);
 
-  const textStyle = {
-    fontFamily: "'Comic Sans MS', 'Comic Sans', cursive",
-    fontSize: "1.2rem",
-    lineHeight: "1.8",
-    color: "#333",
-    textAlign: "left",
-    margin: "0 0 1rem 0",
-    whiteSpace: "pre-wrap", // Preserve line breaks
-    wordWrap: "break-word", // Wrap text to fit smaller containers
-  };
-
-  const title = {
-    fontFamily: "'Comic Sans MS', 'Comic Sans', cursive",
-    fontSize: "3.5rem",
-    fontWeight: "bold",
-    letterSpacing: "0.1rem",
-    color: hover ? "#f0f0f0" : "white",
-    margin: "0",
-    marginTop: "1rem",
-    padding: "0.5rem 1rem",
-    background: "linear-gradient(90deg, #000, #333)",
-    borderRadius: "12px",
-    textAlign: "center",
-    display: "inline-block",
-    textShadow: hover
-      ? "0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6)"
-      : "1px 1px 2px rgba(0, 0, 0, 0.7)",
-    transition: "all 0.3s ease",
-  };
-
-  const resizeImg = {
-    width: "35%",
-    height: "35%",
-    marginBottom: "20px", // Adds space below the image
-  };
-
-  const parentStyle = {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    width: "100%",
-    padding: "20px",
-  };
-
-  const leftStyle = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    padding: "20px",
-    width: "50%",
-  };
-
-  const centerStyle = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    width: "50%",
-  };
-
   return (
-    <div style={parentStyle}>
-      <div style={leftStyle}>
-        <h2 className="fun-facts">Fun facts:</h2>
-        <h2 style={textStyle}>{text}</h2>
-      </div>
-      <div style={centerStyle}>
-        <h1
-          style={title}
+    <PageContainer>
+      <FactsSection className="fade-in-up">
+        <h2 className="fun-facts">Fun Facts About Europe</h2>
+        <FactsText>{text}</FactsText>
+      </FactsSection>
+      
+      <QuizSection className="fade-in-up">
+        <PageTitle
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
-          Europe quizzes
-        </h1>
-        <img style={resizeImg} src={WorldIcon} alt="world-icon" />
+          Europe Quizzes
+        </PageTitle>
+        <ContinentImage src={WorldIcon} alt="Europe icon" />
         <QuizOverview
           continent="Europe"
           capitalPath="/europe-capital-quiz"
           countryPath="/europe-country-quiz"
           flagPath="/europe-flag-quiz"
         />
-      </div>
-    </div>
+      </QuizSection>
+    </PageContainer>
   );
 }
 

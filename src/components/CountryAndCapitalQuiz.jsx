@@ -234,35 +234,41 @@ function Quiz({
             }
           }}
           disabled={quizActive || isLoading || countries.length === 0}
+          className={`btn btn-primary ${isLoading ? 'loading' : ''}`}
         >
+          {isLoading && (
+            <span className="loading-spinner" style={{ marginRight: '8px' }}>
+              ⟳
+            </span>
+          )}
           {isLoading
             ? "Loading..."
             : quizActive
             ? "Quiz In Progress..."
             : countries.length === guessedCountries.length
-            ? "Restart Quiz"
-            : "Start Quiz"}
+            ? "🔄 Restart Quiz"
+            : "🚀 Start Quiz"}
         </button>
 
         {quizActive && (
           <button
             onClick={() => quitQuiz()}
             disabled={!quizActive}
-            style={{ marginLeft: "10px" }}
+            className="btn btn-secondary"
           >
-            Quit Quiz
+            ❌ Quit Quiz
           </button>
         )}
 
         <div className="quiz-message-container">
           {message && (
-            <p
+            <div
               className={`quiz-message ${
                 quizActive ? "quiz-active-message" : "quiz-end-message"
               }`}
             >
               {message}
-            </p>
+            </div>
           )}
         </div>
       </div>
