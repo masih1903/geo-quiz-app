@@ -1,15 +1,12 @@
 import React from "react";
-import AsiaMap from "../../components/AsiaMap";
-import CountryAndCapitalQuiz from "../../components/CountryAndCapitalQuiz";
+import ModernCapitalQuiz from "../../components/ModernCapitalQuiz";
 
 function AsiaCapitals() {
   return (
-    <CountryAndCapitalQuiz
-      regionApiUrl="https://atlasapi.cphmk.dk/api/countries/region/asia"
-      mapComponent={AsiaMap}
-      quizType="capitals"
+    <ModernCapitalQuiz
+      continent="Asia"
+      apiUrl="https://atlasapi.cphmk.dk/api/countries/region/asia"
       title="Asian Capitals Quiz"
-      mapType="asia"
     />
   );
 }

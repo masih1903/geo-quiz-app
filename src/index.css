@@ -1,13 +1,18 @@
 /* Modern CSS Variables */
 :root {
   /* Colors */
-  --primary-color: #2563eb;
-  --primary-hover: #1d4ed8;
+  --primary-color: #3b82f6;
+  --primary-hover: #2563eb;
   --primary-light: #dbeafe;
   --secondary-color: #64748b;
   --accent-color: #f59e0b;
+  --accent-light: #fef3c7;
   --success-color: #10b981;
+  --success-light: #d1fae5;
+  --error-color: #ef4444;
+  --error-light: #fee2e2;
   --warning-color: #f59e0b;
+  --warning-light: #fef3c7;
   --error-color: #ef4444;
   
   /* Neutrals */

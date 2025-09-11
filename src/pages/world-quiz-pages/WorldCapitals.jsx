@@ -1,15 +1,12 @@
 import React from "react";
-import WorldMap from "../../components/WorldMap";
-import CountryAndCapitalQuiz from "../../components/CountryAndCapitalQuiz";
+import ModernCapitalQuiz from "../../components/ModernCapitalQuiz";
 
 function WorldCapitals() {
   return (
-    <CountryAndCapitalQuiz
-      regionApiUrl="https://atlasapi.cphmk.dk/api/countries"
-      mapComponent={WorldMap}
-      quizType="capitals"
+    <ModernCapitalQuiz
+      continent="World"
+      apiUrl="https://atlasapi.cphmk.dk/api/countries/all"
       title="World Capitals Quiz"
-      mapType="world"
     />
   );
 }

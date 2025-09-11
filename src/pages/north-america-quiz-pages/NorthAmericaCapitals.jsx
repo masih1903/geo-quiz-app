@@ -1,15 +1,12 @@
 import React from "react";
-import NorthAmericaMap from "../../components/NorthAmericaMap";
-import CountryAndCapitalQuiz from "../../components/CountryAndCapitalQuiz";
+import ModernCapitalQuiz from "../../components/ModernCapitalQuiz";
 
 function NorthAmericaCapitals() {
   return (
-    <CountryAndCapitalQuiz
-      regionApiUrl="https://atlasapi.cphmk.dk/api/countries/region/northamerica"
-      mapComponent={NorthAmericaMap}
-      quizType="capitals"
+    <ModernCapitalQuiz
+      continent="North America"
+      apiUrl="https://atlasapi.cphmk.dk/api/countries/region/americas"
       title="North American Capitals Quiz"
-      mapType="northamerica"
     />
   );
 }

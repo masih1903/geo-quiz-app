@@ -1,13 +1,12 @@
 import React from "react";
+import EnhancedMapCountryQuiz from "../../components/EnhancedMapCountryQuiz";
 import AfricaMap from "../../components/AfricaMap";
-import CountryAndCapitalQuiz from "../../components/CountryAndCapitalQuiz";
 
 function AfricaCountries() {
   return (
-    <CountryAndCapitalQuiz
+    <EnhancedMapCountryQuiz
       regionApiUrl="https://atlasapi.cphmk.dk/api/countries/region/africa"
       mapComponent={AfricaMap}
-      quizType="countries"
       title="African Countries Quiz"
       mapType="africa"
     />

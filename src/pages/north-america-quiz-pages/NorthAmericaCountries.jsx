@@ -1,13 +1,12 @@
 import React from "react";
+import EnhancedMapCountryQuiz from "../../components/EnhancedMapCountryQuiz";
 import NorthAmericaMap from "../../components/NorthAmericaMap";
-import CountryAndCapitalQuiz from "../../components/CountryAndCapitalQuiz";
 
 function NorthAmericaCountries() {
   return (
-    <CountryAndCapitalQuiz
-      regionApiUrl="https://atlasapi.cphmk.dk/api/countries/region/northamerica"
+    <EnhancedMapCountryQuiz
+      regionApiUrl="https://atlasapi.cphmk.dk/api/countries/region/americas"
       mapComponent={NorthAmericaMap}
-      quizType="countries"
       title="North American Countries Quiz"
       mapType="northamerica"
     />

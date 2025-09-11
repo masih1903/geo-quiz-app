@@ -1,15 +1,12 @@
 import React from "react";
-import SouthAmericaMap from "../../components/SouthAmericaMap";
-import CountryAndCapitalQuiz from "../../components/CountryAndCapitalQuiz";
+import ModernCapitalQuiz from "../../components/ModernCapitalQuiz";
 
 function SouthAmericaCapitals() {
   return (
-    <CountryAndCapitalQuiz
-      regionApiUrl="https://atlasapi.cphmk.dk/api/countries/region/southamerica"
-      mapComponent={SouthAmericaMap}
-      quizType="capitals"
+    <ModernCapitalQuiz
+      continent="South America"
+      apiUrl="https://atlasapi.cphmk.dk/api/countries/region/americas"
       title="South American Capitals Quiz"
-      mapType="southamerica"
     />
   );
 }

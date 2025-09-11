@@ -8,23 +8,62 @@ const HomeContainer = styled.div`
   margin: 0 auto;
 `;
 
-const HeroSection = styled.div`
+const HeroSection = styled.section`
   text-align: center;
-  margin-bottom: var(--space-16);
+  padding: var(--space-24) var(--space-6) var(--space-20);
+  background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 50%, var(--gray-50) 100%);
+  margin-bottom: var(--space-20);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120%;
+    height: 100%;
+    background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><defs><pattern id="dots" width="60" height="60" patternUnits="userSpaceOnUse"><circle cx="30" cy="30" r="1.5" fill="rgba(37, 99, 235, 0.1)"/></pattern></defs><rect width="60" height="60" fill="url(%23dots)"/></svg>');
+    animation: float 20s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(30px, -30px) rotate(120deg); }
+    66% { transform: translate(-20px, 20px) rotate(240deg); }
+  }
 `;
 
 const HeroTitle = styled.h1`
-  font-size: var(--text-5xl);
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--text-4xl), 6vw, 4.5rem);
   font-weight: 800;
-  color: var(--gray-900);
   margin-bottom: var(--space-6);
-  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-  background-clip: text;
+  background: linear-gradient(135deg, var(--gray-900) 0%, var(--primary-color) 50%, var(--accent-color) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  z-index: 2;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 
   @media (max-width: 768px) {
-    font-size: var(--text-4xl);
+    margin-bottom: var(--space-4);
   }
 `;
 
@@ -32,12 +71,16 @@ const HeroSubtitle = styled.p`
   font-size: var(--text-xl);
   color: var(--gray-600);
   max-width: 600px;
-  margin: 0 auto var(--space-8);
+  margin: 0 auto var(--space-12);
   line-height: 1.6;
+  position: relative;
+  z-index: 2;
+  font-weight: 400;
 
   @media (max-width: 768px) {
     font-size: var(--text-lg);
-    margin-bottom: var(--space-6);
+    padding: 0 var(--space-4);
+    margin-bottom: var(--space-8);
   }
 `;
 
