@@ -5,7 +5,7 @@ function WorldCapitals() {
   return (
     <ModernCapitalQuiz
       continent="World"
-      apiUrl="https://atlasapi.cphmk.dk/api/countries/all"
+      apiUrl="https://atlasapi.cphmk.dk/api/countries"
       title="World Capitals Quiz"
     />
   );

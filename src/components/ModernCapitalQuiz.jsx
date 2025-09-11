@@ -224,15 +224,15 @@ const OptionCard = styled.div`
   border-radius: var(--radius-lg);
   padding: var(--space-4);
   border: 2px solid ${props => 
-    props.isCorrect ? 'var(--success-color)' : 
-    props.isWrong ? 'var(--error-color)' : 
+    props.$isCorrect ? 'var(--success-color)' : 
+    props.$isWrong ? 'var(--error-color)' : 
     'var(--gray-200)'
   };
   cursor: pointer;
   transition: all var(--transition-fast);
   position: relative;
   overflow: hidden;
-  animation: ${props => props.shake ? shake : 'none'} 0.5s ease-in-out;
+  animation: ${props => props.$shake ? shake : 'none'} 0.5s ease-in-out;
   
   &::before {
     content: '';
@@ -259,7 +259,7 @@ const OptionCard = styled.div`
     transform: translateY(-2px);
   }
   
-  ${props => props.disabled && `
+  ${props => props.$disabled && `
     opacity: 0.6;
     cursor: not-allowed;
     
@@ -292,8 +292,8 @@ const TimerDisplay = styled.div`
   margin-bottom: var(--space-4);
   font-size: var(--text-lg);
   font-weight: 600;
-  color: ${props => props.urgent ? 'var(--error-color)' : 'var(--gray-600)'};
-  animation: ${props => props.urgent ? timerPulse : 'none'} 1s infinite;
+  color: ${props => props.$urgent ? 'var(--error-color)' : 'var(--gray-600)'};
+  animation: ${props => props.$urgent ? timerPulse : 'none'} 1s infinite;
 `;
 
 const ActionButtons = styled.div`
@@ -620,7 +620,7 @@ function ModernCapitalQuiz({ continent, apiUrl, title }) {
                 <QuestionSection>
                   <QuestionText>Which country has this capital?</QuestionText>
                   <CapitalName>{currentCountry.capital[0]}</CapitalName>
-                  <TimerDisplay urgent={currentQuestionTime > 20}>
+                  <TimerDisplay $urgent={currentQuestionTime > 20}>
                     ⏱️ {formatTime(currentQuestionTime)}
                     {attempts > 0 && (
                       <span style={{ color: 'var(--error-color)', marginLeft: 'var(--space-2)' }}>
@@ -641,10 +641,10 @@ function ModernCapitalQuiz({ continent, apiUrl, title }) {
                     <OptionCard
                       key={country.name.common}
                       onClick={() => handleOptionClick(country)}
-                      isCorrect={isCorrect}
-                      isWrong={isWrong}
-                      shake={shouldShake}
-                      disabled={gameCompleted}
+                      $isCorrect={isCorrect}
+                      $isWrong={isWrong}
+                      $shake={shouldShake}
+                      $disabled={gameCompleted}
                     >
                       <CountryName>{country.name.common}</CountryName>
                     </OptionCard>
