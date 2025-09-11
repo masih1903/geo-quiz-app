@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import "../App.css";
 
 // Animations
@@ -189,8 +189,8 @@ const MainContent = styled.div`
   position: relative;
   overflow: hidden;
   
-  ${props => props.correctFlash && `animation: ${correctFlash} 0.6s ease-out;`}
-  ${props => props.wrongFlash && `animation: ${wrongFlash} 0.6s ease-out;`}
+  ${props => props.correctFlash && css`animation: ${correctFlash} 0.6s ease-out;`}
+  ${props => props.wrongFlash && css`animation: ${wrongFlash} 0.6s ease-out;`}
 `;
 
 const QuestionSection = styled.div`
@@ -245,14 +245,6 @@ const AttemptIndicator = styled.div`
   justify-content: center;
   gap: var(--space-2);
   margin-top: var(--space-2);
-  
-  span {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: ${props => props.used ? 'var(--error-color)' : 'var(--gray-300)'};
-    transition: all var(--transition-fast);
-  }
 `;
 
 const ActionButtons = styled.div`
@@ -687,6 +679,38 @@ function EnhancedMapCountryQuiz({
 
       <GameArea>
         <Sidebar>
+          {currentCountry && quizActive && (
+            <StatsCard>
+              <StatTitle>🎯 Current Question</StatTitle>
+              <div style={{ textAlign: 'center' }}>
+                <QuestionText style={{ fontSize: 'var(--text-lg)', marginBottom: 'var(--space-2)' }}>Find this country:</QuestionText>
+                <CountryDisplay style={{ fontSize: 'var(--text-xl)', marginBottom: 'var(--space-3)' }}>{currentCountry.name}</CountryDisplay>
+                <TimerDisplay urgent={currentQuestionTime > 20}>
+                  ⏱️ {formatTime(currentQuestionTime)}
+                </TimerDisplay>
+                <div style={{ marginTop: 'var(--space-3)' }}>
+                  <p style={{ fontSize: 'var(--text-sm)', color: 'var(--gray-600)', margin: '0 0 var(--space-2) 0', fontWeight: '500' }}>
+                    Attempts: {currentAttempts}/4
+                  </p>
+                  <AttemptIndicator>
+                    {[1, 2, 3, 4].map(attempt => (
+                      <span 
+                        key={attempt} 
+                        style={{
+                          width: '12px',
+                          height: '12px',
+                          borderRadius: '50%',
+                          backgroundColor: attempt <= currentAttempts ? 'var(--error-color)' : 'var(--gray-300)',
+                          transition: 'all var(--transition-fast)'
+                        }}
+                      />
+                    ))}
+                  </AttemptIndicator>
+                </div>
+              </div>
+            </StatsCard>
+          )}
+
           <StatsCard>
             <StatTitle>📊 Progress</StatTitle>
             <StatValue>{completedCountries}/{totalCountries}</StatValue>
@@ -743,22 +767,6 @@ function EnhancedMapCountryQuiz({
             </div>
           ) : (
             <>
-              {currentCountry && quizActive && (
-                <QuestionSection>
-                  <QuestionText>Find this country on the map:</QuestionText>
-                  <CountryDisplay>{currentCountry.name}</CountryDisplay>
-                  <TimerDisplay urgent={currentQuestionTime > 20}>
-                    ⏱️ {formatTime(currentQuestionTime)}
-                  </TimerDisplay>
-                  <AttemptIndicator>
-                    <span>Attempts:</span>
-                    {[1, 2, 3, 4].map(attempt => (
-                      <span key={attempt} used={attempt <= currentAttempts} />
-                    ))}
-                  </AttemptIndicator>
-                </QuestionSection>
-              )}
-
               <MapContainer style={mapStyles[mapType]} onClick={clickHandler}>
                 <MapComponent
                   guessedCountries={guessedCountries}
