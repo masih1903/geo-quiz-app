@@ -12,7 +12,7 @@ const HeroSection = styled.section`
   text-align: center;
   padding: var(--space-24) var(--space-6) var(--space-20);
   background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 50%, var(--gray-50) 100%);
-  margin-bottom: var(--space-20);
+  margin-bottom: var(--space-8);
   position: relative;
   overflow: hidden;
 
@@ -49,21 +49,17 @@ const HeroSection = styled.section`
 `;
 
 const HeroTitle = styled.h1`
-  font-family: var(--font-family-display);
-  font-size: clamp(var(--text-4xl), 6vw, 4.5rem);
+  font-size: var(--text-5xl);
   font-weight: 800;
+  color: var(--gray-900);
   margin-bottom: var(--space-6);
-  background: linear-gradient(135deg, var(--gray-900) 0%, var(--primary-color) 50%, var(--accent-color) 100%);
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
-  position: relative;
-  z-index: 2;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
 
   @media (max-width: 768px) {
-    margin-bottom: var(--space-4);
+    font-size: var(--text-4xl);
   }
 `;
 
@@ -71,16 +67,12 @@ const HeroSubtitle = styled.p`
   font-size: var(--text-xl);
   color: var(--gray-600);
   max-width: 600px;
-  margin: 0 auto var(--space-12);
+  margin: 0 auto var(--space-8);
   line-height: 1.6;
-  position: relative;
-  z-index: 2;
-  font-weight: 400;
 
   @media (max-width: 768px) {
     font-size: var(--text-lg);
-    padding: 0 var(--space-4);
-    margin-bottom: var(--space-8);
+    margin-bottom: var(--space-6);
   }
 `;
 
