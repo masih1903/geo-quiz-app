@@ -131,8 +131,8 @@ function Quiz({
         ]);
 
         setGuesses((prev) => ({ ...prev, [currentCountry.cca2]: 0 }));
-        setTimeout(() => setQuizActive(false), 300);
-        setTimeout(() => drawCountry(), 300);
+        setQuizActive(false);
+        drawCountry();
       } else if (currentAttempts >= 4) {
         // Max attempts reached
         setGuessedCountries((prevGuessedCountries) => [
@@ -150,7 +150,7 @@ function Quiz({
         );
         setTimeout(() => setMessage(""), 2000); // Clear message after 2 seconds
         setQuizActive(false);
-        setTimeout(() => drawCountry(), 300);
+        drawCountry();
       } else {
         // Incorrect guess
         setGuesses((prev) => ({

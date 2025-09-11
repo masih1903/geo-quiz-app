@@ -527,9 +527,7 @@ function ModernCapitalQuiz({ continent, apiUrl, title }) {
       );
       setRemainingCountries(newRemaining);
       
-      setTimeout(() => {
-        selectRandomCountry(newRemaining);
-      }, 1000);
+      selectRandomCountry(newRemaining);
     } else {
       // Wrong answer
       setAttempts((prev) => prev + 1);
@@ -547,9 +545,7 @@ function ModernCapitalQuiz({ continent, apiUrl, title }) {
         );
         setRemainingCountries(newRemaining);
         
-        setTimeout(() => {
-          selectRandomCountry(newRemaining);
-        }, 1500);
+        selectRandomCountry(newRemaining);
       }
     }
   };
