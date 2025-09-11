@@ -42,6 +42,12 @@ const shake = keyframes`
   75% { transform: translateX(5px); }
 `;
 
+const timerPulse = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+`;
+
 // Styled Components
 const QuizContainer = styled.div`
   min-height: 100vh;
@@ -279,6 +285,35 @@ const CountryName = styled.p`
   }
 `;
 
+const CountryNameBox = styled.div`
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: var(--space-4) 0;
+  padding: var(--space-4);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--primary-color);
+  animation: ${pulse} 2s infinite;
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    font-size: var(--text-2xl);
+  }
+`;
+
+const TimerDisplay = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: ${props => props.urgent ? 'var(--error-color)' : 'var(--gray-600)'};
+  animation: ${props => props.urgent ? timerPulse : 'none'} 1s infinite;
+`;
+
 const ActionButtons = styled.div`
   display: flex;
   gap: var(--space-4);
@@ -437,6 +472,29 @@ const ModalText = styled.p`
   line-height: 1.6;
 `;
 
+const FloatingQuestionBox = styled.div`
+  position: fixed;
+  border: 2px solid black;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(145deg, #f3f3f3, #e0e0e0);
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #333;
+  pointer-events: none;
+  z-index: 1000;
+  max-width: 300px;
+  text-align: center;
+  white-space: nowrap;
+  
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    max-width: 250px;
+  }
+`;
+
 function ModernFlagQuiz({ continent, apiUrl, title }) {
   const [countries, setCountries] = useState([]);
   const [remainingCountries, setRemainingCountries] = useState([]);
@@ -449,6 +507,11 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
   const [shakeCard, setShakeCard] = useState(null);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [questionStartTime, setQuestionStartTime] = useState(null);
+  const [totalTime, setTotalTime] = useState(0);
+  const [currentQuestionTime, setCurrentQuestionTime] = useState(0);
+  const [points, setPoints] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -472,12 +535,38 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
       });
   }, [apiUrl]);
 
+  // Track cursor position for floating question box
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      setCursorPosition({ x: event.clientX, y: event.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  // Timer effect
+  useEffect(() => {
+    let interval;
+    if (gameStarted && !gameCompleted && currentCountry) {
+      interval = setInterval(() => {
+        const now = Date.now();
+        if (questionStartTime) {
+          setCurrentQuestionTime(Math.floor((now - questionStartTime) / 1000));
+        }
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [gameStarted, gameCompleted, currentCountry, questionStartTime]);
+
   const startGame = () => {
+    window.scrollTo(0, 0);
     setGameStarted(true);
     setGameCompleted(false);
     setCorrectGuesses([]);
     setWrongGuesses([]);
     setRemainingCountries(countries);
+    setTotalTime(0);
+    setPoints(0);
     selectRandomCountry(countries);
   };
 
@@ -486,6 +575,8 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
       const randomIndex = Math.floor(Math.random() * availableCountries.length);
       setCurrentCountry(availableCountries[randomIndex]);
       setAttempts(0);
+      setQuestionStartTime(Date.now());
+      setCurrentQuestionTime(0);
     } else {
       setCurrentCountry(null);
       setGameCompleted(true);
@@ -493,12 +584,31 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
     }
   };
 
+  const calculatePoints = (attempts, timeInSeconds) => {
+    let basePoints = 100;
+    
+    // Deduct points for wrong attempts
+    basePoints -= (attempts * 20);
+    
+    // Time bonus (faster = more points)
+    if (timeInSeconds <= 5) basePoints += 50;
+    else if (timeInSeconds <= 10) basePoints += 30;
+    else if (timeInSeconds <= 15) basePoints += 10;
+    
+    return Math.max(basePoints, 10); // Minimum 10 points
+  };
+
   const handleFlagClick = (countryName) => {
     if (!currentCountry || gameCompleted) return;
 
+    const questionTime = Math.floor((Date.now() - questionStartTime) / 1000);
+    setTotalTime(prev => prev + questionTime);
+
     if (countryName === currentCountry.name.common) {
       // Correct answer
-      setCorrectGuesses((prev) => [...prev, currentCountry]);
+      const earnedPoints = calculatePoints(attempts, questionTime);
+      setPoints(prev => prev + earnedPoints);
+      setCorrectGuesses((prev) => [...prev, { ...currentCountry, attempts: attempts + 1, time: questionTime, points: earnedPoints }]);
       const newRemaining = remainingCountries.filter(
         (country) => country.name.common !== countryName
       );
@@ -518,7 +628,7 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
       
       if (attempts + 1 >= 3) {
         // Max attempts reached
-        setWrongGuesses((prev) => [...prev, currentCountry]);
+        setWrongGuesses((prev) => [...prev, { ...currentCountry, attempts: attempts + 1, time: questionTime }]);
         const newRemaining = remainingCountries.filter(
           (country) => country.name.common !== currentCountry.name.common
         );
@@ -540,6 +650,15 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
     setRemainingCountries(countries);
     setAttempts(0);
     setShowCompletionModal(false);
+    setTotalTime(0);
+    setCurrentQuestionTime(0);
+    setPoints(0);
+  };
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   const totalCountries = countries.length;
@@ -562,11 +681,6 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
     <QuizContainer>
       <Header>
         <Title>{title}</Title>
-        <Subtitle>
-          {gameStarted && !gameCompleted
-            ? `Identify the flag for: ${currentCountry?.name.common || 'Loading...'}`
-            : `Test your knowledge of ${continent} flags!`}
-        </Subtitle>
       </Header>
 
       <GameArea>
@@ -588,14 +702,16 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
             <>
               {currentCountry && !gameCompleted && (
                 <QuestionSection>
-                  <QuestionText>
-                    Which country does this flag belong to?
+                  <QuestionText>Which flag belongs to this country?</QuestionText>
+                  <CountryNameBox>{currentCountry.name.common}</CountryNameBox>
+                  <TimerDisplay urgent={currentQuestionTime > 20}>
+                    ⏱️ {formatTime(currentQuestionTime)}
                     {attempts > 0 && (
-                      <span style={{ color: 'var(--error-color)', fontSize: 'var(--text-base)' }}>
-                        {' '}(Attempt {attempts + 1}/3)
+                      <span style={{ color: 'var(--error-color)', marginLeft: 'var(--space-2)' }}>
+                        (Attempt {attempts + 1}/3)
                       </span>
                     )}
-                  </QuestionText>
+                  </TimerDisplay>
                 </QuestionSection>
               )}
 
@@ -683,6 +799,18 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
         <Sidebar>
           <StatsCard>
             <StatTitle>
+              ⏱️ Time
+            </StatTitle>
+            <StatValue style={{ color: 'var(--accent-color)' }}>
+              {formatTime(totalTime + currentQuestionTime)}
+            </StatValue>
+            <p style={{ color: 'var(--gray-600)', fontSize: 'var(--text-sm)', margin: 0 }}>
+              Total time elapsed
+            </p>
+          </StatsCard>
+
+          <StatsCard>
+            <StatTitle>
               📊 Progress
             </StatTitle>
             <StatValue>{completedCountries}/{totalCountries}</StatValue>
@@ -706,13 +834,13 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
 
           <StatsCard>
             <StatTitle>
-              🏆 Score
+              🏆 Points
             </StatTitle>
             <StatValue style={{ color: 'var(--success-color)' }}>
-              {correctGuesses.length}
+              {points}
             </StatValue>
             <p style={{ color: 'var(--gray-600)', fontSize: 'var(--text-sm)', margin: 0 }}>
-              Flags identified correctly
+              Total points earned
             </p>
           </StatsCard>
         </Sidebar>
@@ -726,6 +854,10 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
               Great job! You've completed the {continent} flag quiz.
               <br />
               <strong>Final Score: {correctGuesses.length}/{totalCountries}</strong>
+              <br />
+              <strong>Total Points: {points}</strong>
+              <br />
+              <strong>Total Time: {formatTime(totalTime)}</strong>
               <br />
               Accuracy: {Math.round(accuracy)}%
             </ModalText>

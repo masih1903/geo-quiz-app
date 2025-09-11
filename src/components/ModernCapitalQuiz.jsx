@@ -470,6 +470,7 @@ function ModernCapitalQuiz({ continent, apiUrl, title }) {
   };
 
   const startGame = () => {
+    window.scrollTo(0, 0);
     setGameStarted(true);
     setGameCompleted(false);
     setCorrectGuesses([]);
@@ -668,6 +669,18 @@ function ModernCapitalQuiz({ continent, apiUrl, title }) {
         <Sidebar>
           <StatsCard>
             <StatTitle>
+              ⏱️ Time
+            </StatTitle>
+            <StatValue style={{ color: 'var(--accent-color)' }}>
+              {formatTime(totalTime + currentQuestionTime)}
+            </StatValue>
+            <p style={{ color: 'var(--gray-600)', fontSize: 'var(--text-sm)', margin: 0 }}>
+              Total time elapsed
+            </p>
+          </StatsCard>
+
+          <StatsCard>
+            <StatTitle>
               📊 Progress
             </StatTitle>
             <StatValue>{completedCountries}/{totalCountries}</StatValue>
@@ -698,18 +711,6 @@ function ModernCapitalQuiz({ continent, apiUrl, title }) {
             </StatValue>
             <p style={{ color: 'var(--gray-600)', fontSize: 'var(--text-sm)', margin: 0 }}>
               Total points earned
-            </p>
-          </StatsCard>
-
-          <StatsCard>
-            <StatTitle>
-              ⏱️ Time
-            </StatTitle>
-            <StatValue style={{ color: 'var(--accent-color)' }}>
-              {formatTime(totalTime + currentQuestionTime)}
-            </StatValue>
-            <p style={{ color: 'var(--gray-600)', fontSize: 'var(--text-sm)', margin: 0 }}>
-              Total time elapsed
             </p>
           </StatsCard>
         </Sidebar>

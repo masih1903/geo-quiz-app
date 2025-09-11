@@ -6,7 +6,7 @@ function AfricaFlags() {
     <ModernFlagQuiz
       continent="Africa"
       apiUrl="https://atlasapi.cphmk.dk/api/countries/region/africa"
-      title="🌍 Africa Flag Quiz"
+      title="Africa Flag Quiz"
     />
   );
 }

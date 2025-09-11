@@ -6,7 +6,7 @@ function EuropeFlags() {
     <ModernFlagQuiz
       continent="Europe"
       apiUrl="https://atlasapi.cphmk.dk/api/countries/region/europe"
-      title="🇪🇺 Europe Flag Quiz"
+      title="Europe Flag Quiz"
     />
   );
 }

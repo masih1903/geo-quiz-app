@@ -6,7 +6,7 @@ function AsiaFlags() {
     <ModernFlagQuiz
       continent="Asia"
       apiUrl="https://atlasapi.cphmk.dk/api/countries/region/asia"
-      title="🌏 Asia Flag Quiz"
+      title="Asia Flag Quiz"
     />
   );
 }

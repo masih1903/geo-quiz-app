@@ -472,6 +472,7 @@ function ModernCountryQuiz({ continent, apiUrl, title }) {
   };
 
   const startGame = () => {
+    window.scrollTo(0, 0);
     setGameStarted(true);
     setGameCompleted(false);
     setCorrectGuesses([]);

@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
 import styled from "styled-components";
 import HomeIcon from "../SvgComponents/HomeIcon";
+import ScrollToTop from "../components/ScrollToTop";
 
 const Container = styled.div`
   display: flex;
@@ -156,6 +157,7 @@ function MainLayout() {
           </ul>
         </Nav>
       </StyledHeader>
+      <ScrollToTop />
       <Outlet />
       <StyledFooter>
         <p>© {new Date().getFullYear()} Atlas Quiz - Explore the World Through Geography</p>

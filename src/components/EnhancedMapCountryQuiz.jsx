@@ -511,6 +511,11 @@ function EnhancedMapCountryQuiz({
       return;
     }
 
+    // Scroll to top when starting the quiz
+    if (guessedCountries.length === 0) {
+      window.scrollTo(0, 0);
+    }
+
     setIsLoading(true);
 
     // Remove delay - execute immediately

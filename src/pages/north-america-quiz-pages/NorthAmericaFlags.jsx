@@ -6,7 +6,7 @@ function NorthAmericaFlags() {
     <ModernFlagQuiz
       continent="North America"
       apiUrl="https://atlasapi.cphmk.dk/api/countries/region/northamerica"
-      title="🌎 North America Flag Quiz"
+      title="North America Flag Quiz"
     />
   );
 }

@@ -6,7 +6,7 @@ function WorldFlags() {
     <ModernFlagQuiz
       continent="World"
       apiUrl="https://atlasapi.cphmk.dk/api/countries"
-      title="🌍 World Flag Quiz"
+      title="World Flag Quiz"
     />
   );
 }
