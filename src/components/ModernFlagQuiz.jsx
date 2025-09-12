@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
 // Animations
@@ -170,7 +170,7 @@ const ProgressFill = styled.div`
   background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
   border-radius: var(--radius-lg);
   transition: width var(--transition-normal);
-  width: ${props => props.percentage}%;
+  width: ${props => props.$percentage}%;
 `;
 
 const QuestionSection = styled.div`
@@ -343,7 +343,7 @@ const ActionButton = styled.button`
   white-space: nowrap;
   min-width: 140px;
   
-  ${props => props.primary ? `
+  ${props => props.$primary ? `
     background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
     color: var(--white);
     
@@ -390,8 +390,8 @@ const ResultsSection = styled.div`
 `;
 
 const ResultCard = styled.div`
-  background: ${props => props.correct ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'};
-  border: 1px solid ${props => props.correct ? 'var(--success-color)' : 'var(--error-color)'};
+  background: ${props => props.$correct ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'};
+  border: 1px solid ${props => props.$correct ? 'var(--success-color)' : 'var(--error-color)'};
   border-radius: var(--radius-xl);
   padding: var(--space-6);
 `;
@@ -400,7 +400,7 @@ const ResultTitle = styled.h3`
   font-family: var(--font-family-display);
   font-size: var(--text-lg);
   font-weight: 600;
-  color: ${props => props.correct ? 'var(--success-color)' : 'var(--error-color)'};
+  color: ${props => props.$correct ? 'var(--success-color)' : 'var(--error-color)'};
   margin-bottom: var(--space-4);
   display: flex;
   align-items: center;
@@ -473,28 +473,6 @@ const ModalText = styled.p`
   line-height: 1.6;
 `;
 
-const FloatingQuestionBox = styled.div`
-  position: fixed;
-  border: 2px solid black;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background: linear-gradient(145deg, #f3f3f3, #e0e0e0);
-  padding: 8px 12px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  color: #333;
-  pointer-events: none;
-  z-index: 1000;
-  max-width: 300px;
-  text-align: center;
-  white-space: nowrap;
-  
-  @media (max-width: 768px) {
-    font-size: 0.8rem;
-    padding: 6px 10px;
-    max-width: 250px;
-  }
-`;
 
 function ModernFlagQuiz({ continent, apiUrl, title }) {
   const [countries, setCountries] = useState([]);
@@ -706,7 +684,7 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
                 You'll be shown flags from {continent} and need to identify the correct country.
                 You have 3 attempts per flag. Good luck!
               </p>
-              <ActionButton primary onClick={startGame}>
+              <ActionButton $primary onClick={startGame}>
                 🚀 Start Quiz
               </ActionButton>
             </div>
@@ -753,7 +731,7 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
                   🔄 Reset Game
                 </ActionButton>
                 {gameCompleted && (
-                  <ActionButton primary onClick={startGame}>
+                  <ActionButton $primary onClick={startGame}>
                     🎯 Play Again
                   </ActionButton>
                 )}
@@ -764,8 +742,8 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
           {(correctGuesses.length > 0 || wrongGuesses.length > 0) && (
             <ResultsSection>
               {correctGuesses.length > 0 && (
-                <ResultCard correct>
-                  <ResultTitle correct>
+                <ResultCard $correct>
+                  <ResultTitle $correct>
                     ✅ Correct Answers ({correctGuesses.length})
                   </ResultTitle>
                   <ResultGrid>
@@ -783,8 +761,8 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
               )}
 
               {wrongGuesses.length > 0 && (
-                <ResultCard>
-                  <ResultTitle>
+                <ResultCard $correct={false}>
+                  <ResultTitle $correct={false}>
                     ❌ Missed Answers ({wrongGuesses.length})
                   </ResultTitle>
                   <ResultGrid>
@@ -823,7 +801,7 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
             </StatTitle>
             <StatValue>{completedCountries}/{totalCountries}</StatValue>
             <ProgressBar>
-              <ProgressFill percentage={progressPercentage} />
+              <ProgressFill $percentage={progressPercentage} />
             </ProgressBar>
             <p style={{ color: 'var(--gray-600)', fontSize: 'var(--text-sm)', margin: 0 }}>
               {Math.round(progressPercentage)}% Complete
@@ -870,7 +848,7 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
               Accuracy: {Math.round(accuracy)}%
             </ModalText>
             <ActionButtons>
-              <ActionButton primary onClick={() => {
+              <ActionButton $primary onClick={() => {
                 setShowCompletionModal(false);
                 startGame();
               }}>

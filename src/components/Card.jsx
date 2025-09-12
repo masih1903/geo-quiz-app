@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import styled from "styled-components";
 import WorldLogo from "../assets/world.png";
 
@@ -128,13 +127,8 @@ const GradientOverlay = styled.div`
 `;
 
 function Card(props) {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
-    <CardContainer
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <CardContainer>
       <GradientOverlay />
       <ImageContainer>
         <CardImage src={WorldLogo} alt={`${props.title} continent`} />

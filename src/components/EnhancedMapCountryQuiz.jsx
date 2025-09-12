@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled, { keyframes, css } from "styled-components";
 import "../App.css";
 
@@ -184,7 +184,7 @@ const ProgressFill = styled.div`
   background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
   border-radius: var(--radius-lg);
   transition: width var(--transition-normal);
-  width: ${props => props.percentage}%;
+  width: ${props => props.$percentage}%;
 `;
 
 const MainContent = styled.div`
@@ -280,7 +280,7 @@ const ActionButton = styled.button`
   white-space: nowrap;
   min-width: 140px;
   
-  ${props => props.primary ? `
+  ${props => props.$primary ? `
     background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
     color: var(--white);
     
@@ -909,7 +909,7 @@ function EnhancedMapCountryQuiz({
             <StatTitle>📊 Progress</StatTitle>
             <StatValue>{completedCountries}/{totalCountries}</StatValue>
             <ProgressBar>
-              <ProgressFill percentage={progressPercentage} />
+              <ProgressFill $percentage={progressPercentage} />
             </ProgressBar>
             <p style={{ color: 'var(--gray-600)', fontSize: 'var(--text-sm)', margin: 0 }}>
               {Math.round(progressPercentage)}% Complete
@@ -974,7 +974,7 @@ function EnhancedMapCountryQuiz({
               <p style={{ marginBottom: 'var(--space-8)', color: 'var(--gray-600)', fontSize: 'var(--text-lg)' }}>
                 Click on countries on the interactive map.
               </p>
-              <ActionButton primary onClick={drawCountry} disabled={isLoading}>
+              <ActionButton $primary onClick={drawCountry} disabled={isLoading}>
                 🚀 Start Quiz
               </ActionButton>
             </div>
@@ -1000,7 +1000,7 @@ function EnhancedMapCountryQuiz({
                   🔄 Reset Game
                 </ActionButton>
                 {!quizActive && completedCountries === totalCountries && (
-                  <ActionButton primary onClick={drawCountry}>
+                  <ActionButton $primary onClick={drawCountry}>
                     🎯 Play Again
                   </ActionButton>
                 )}
@@ -1074,7 +1074,7 @@ function EnhancedMapCountryQuiz({
             </ModalStats>
             
             <ActionButtons>
-              <ActionButton primary onClick={() => {
+              <ActionButton $primary onClick={() => {
                 setShowCompletionModal(false);
                 resetQuiz();
               }}>

@@ -170,7 +170,7 @@ const ProgressFill = styled.div`
   background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
   border-radius: var(--radius-lg);
   transition: width var(--transition-normal);
-  width: ${props => props.percentage}%;
+  width: ${props => props.$percentage}%;
 `;
 
 const QuestionSection = styled.div`
@@ -324,7 +324,7 @@ const ActionButton = styled.button`
   white-space: nowrap;
   min-width: 140px;
   
-  ${props => props.primary ? `
+  ${props => props.$primary ? `
     background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
     color: var(--white);
     
@@ -610,7 +610,7 @@ function ModernCapitalQuiz({ continent, apiUrl, title }) {
                 You'll be shown capitals from {continent} and need to identify the correct country.
                 You have 3 attempts per question. Faster answers earn more points!
               </p>
-              <ActionButton primary onClick={startGame}>
+              <ActionButton $primary onClick={startGame}>
                 🚀 Start Quiz
               </ActionButton>
             </div>
@@ -657,7 +657,7 @@ function ModernCapitalQuiz({ continent, apiUrl, title }) {
                   🔄 Reset Game
                 </ActionButton>
                 {gameCompleted && (
-                  <ActionButton primary onClick={startGame}>
+                  <ActionButton $primary onClick={startGame}>
                     🎯 Play Again
                   </ActionButton>
                 )}
@@ -685,7 +685,7 @@ function ModernCapitalQuiz({ continent, apiUrl, title }) {
             </StatTitle>
             <StatValue>{completedCountries}/{totalCountries}</StatValue>
             <ProgressBar>
-              <ProgressFill percentage={progressPercentage} />
+              <ProgressFill $percentage={progressPercentage} />
             </ProgressBar>
             <p style={{ color: 'var(--gray-600)', fontSize: 'var(--text-sm)', margin: 0 }}>
               {Math.round(progressPercentage)}% Complete
@@ -732,7 +732,7 @@ function ModernCapitalQuiz({ continent, apiUrl, title }) {
               Accuracy: {Math.round(accuracy)}%
             </ModalText>
             <ActionButtons>
-              <ActionButton primary onClick={() => {
+              <ActionButton $primary onClick={() => {
                 setShowCompletionModal(false);
                 startGame();
               }}>

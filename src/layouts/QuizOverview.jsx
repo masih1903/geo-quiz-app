@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { useState } from "react";
 import WorldLogo from "../assets/world.png";
 import CapitalLogo from "../assets/capital.png";
 
@@ -107,7 +106,6 @@ const QuizBadge = styled.div`
 `;
 
 function QuizOverview(props) {
-  const [hovered, setHovered] = useState(null);
 
   const quizTypes = [
     {
@@ -139,8 +137,6 @@ function QuizOverview(props) {
         <QuizCard
           key={quiz.type}
           to={quiz.path}
-          onMouseEnter={() => setHovered(quiz.type)}
-          onMouseLeave={() => setHovered(null)}
         >
           <QuizBadge />
           <QuizIcon src={quiz.icon} alt={quiz.alt} />

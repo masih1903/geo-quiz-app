@@ -1,4 +1,3 @@
-import React from "react";
 import ModernFlagQuiz from "../../components/ModernFlagQuiz";
 
 function WorldFlags() {

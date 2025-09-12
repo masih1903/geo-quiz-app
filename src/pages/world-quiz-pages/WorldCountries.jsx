@@ -1,4 +1,3 @@
-import React from "react";
 import EnhancedMapCountryQuiz from "../../components/EnhancedMapCountryQuiz";
 import WorldMap from "../../components/WorldMap";
 
