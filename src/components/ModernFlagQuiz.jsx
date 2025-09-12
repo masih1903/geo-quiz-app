@@ -193,12 +193,13 @@ const QuestionText = styled.h2`
 
 const FlagGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(120px, 120px));
   gap: var(--space-4);
   margin-bottom: var(--space-6);
+  justify-content: center;
   
   @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(100px, 100px));
     gap: var(--space-3);
   }
 `;
@@ -571,18 +572,18 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
   };
 
   const selectRandomCountry = (availableCountries) => {
-    if (availableCountries.length > 0) {
-      const randomIndex = Math.floor(Math.random() * availableCountries.length);
-      setCurrentCountry(availableCountries[randomIndex]);
-      setAttempts(0);
-      setQuestionStartTime(Date.now());
-      setCurrentQuestionTime(0);
-    } else {
-      setCurrentCountry(null);
-      setGameCompleted(true);
-      setShowCompletionModal(true);
-    }
-  };
+  if (availableCountries.length > 0) {
+    const randomIndex = Math.floor(Math.random() * availableCountries.length);
+    setCurrentCountry(availableCountries[randomIndex]);
+    setAttempts(0);
+    setQuestionStartTime(Date.now());
+    setCurrentQuestionTime(0);
+  } else {
+    setCurrentCountry(null);
+    setGameCompleted(true);
+    setShowCompletionModal(true);
+  }
+};
 
   const calculatePoints = (attempts, timeInSeconds) => {
     let basePoints = 100;
@@ -599,7 +600,7 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
   };
 
   const handleFlagClick = (countryName) => {
-    if (!currentCountry || gameCompleted) return;
+    if (!currentCountry || gameCompleted || attempts >= 3) return;
 
     const questionTime = Math.floor((Date.now() - questionStartTime) / 1000);
     setTotalTime(prev => prev + questionTime);
@@ -608,35 +609,45 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
       // Correct answer
       const earnedPoints = calculatePoints(attempts, questionTime);
       setPoints(prev => prev + earnedPoints);
-      setCorrectGuesses((prev) => [...prev, { ...currentCountry, attempts: attempts + 1, time: questionTime, points: earnedPoints }]);
+      
+      // Only add if not already in correct guesses
+      setCorrectGuesses((prev) => {
+        const alreadyExists = prev.some(c => c.name.common === currentCountry.name.common);
+        if (alreadyExists) return prev;
+        return [...prev, { ...currentCountry, attempts: attempts + 1, time: questionTime, points: earnedPoints }];
+      });
+      
       const newRemaining = remainingCountries.filter(
         (country) => country.name.common !== countryName
       );
       setRemainingCountries(newRemaining);
       
-      setTimeout(() => {
-        selectRandomCountry(newRemaining);
-      }, 1000);
+      selectRandomCountry(newRemaining);
     } else {
       // Wrong answer
-      setAttempts((prev) => prev + 1);
+      const newAttempts = attempts + 1;
+      setAttempts(newAttempts);
       setShakeCard(countryName);
       
       setTimeout(() => {
         setShakeCard(null);
       }, 500);
       
-      if (attempts + 1 >= 3) {
+      if (newAttempts >= 3) {
         // Max attempts reached
-        setWrongGuesses((prev) => [...prev, { ...currentCountry, attempts: attempts + 1, time: questionTime }]);
+        // Only add if not already in wrong guesses
+        setWrongGuesses((prev) => {
+          const alreadyExists = prev.some(c => c.name.common === currentCountry.name.common);
+          if (alreadyExists) return prev;
+          return [...prev, { ...currentCountry, attempts: newAttempts, time: questionTime }];
+        });
+        
         const newRemaining = remainingCountries.filter(
           (country) => country.name.common !== currentCountry.name.common
         );
         setRemainingCountries(newRemaining);
         
-        setTimeout(() => {
-          selectRandomCountry(newRemaining);
-        }, 1500);
+        selectRandomCountry(newRemaining);
       }
     }
   };
@@ -662,7 +673,8 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
   };
 
   const totalCountries = countries.length;
-  const completedCountries = correctGuesses.length + wrongGuesses.length;
+  const completedCountries = Math.min(correctGuesses.length + wrongGuesses.length, totalCountries);
+  const remainingQuestionsCount = totalCountries - completedCountries;
   const progressPercentage = totalCountries > 0 ? (completedCountries / totalCountries) * 100 : 0;
   const accuracy = completedCountries > 0 ? (correctGuesses.length / completedCountries) * 100 : 0;
 
@@ -717,16 +729,12 @@ function ModernFlagQuiz({ continent, apiUrl, title }) {
 
               <FlagGrid>
                 {remainingCountries.map((country) => {
-                  const isCorrect = correctGuesses.some(c => c.name.common === country.name.common);
-                  const isWrong = wrongGuesses.some(c => c.name.common === country.name.common);
                   const shouldShake = shakeCard === country.name.common;
                   
                   return (
                     <FlagCard
                       key={country.name.common}
                       onClick={() => handleFlagClick(country.name.common)}
-                      $isCorrect={isCorrect}
-                      $isWrong={isWrong}
                       $shake={shouldShake}
                       $disabled={gameCompleted}
                     >

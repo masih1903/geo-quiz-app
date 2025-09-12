@@ -511,9 +511,26 @@ function EnhancedMapCountryQuiz({
       return;
     }
 
-    // Scroll to top when starting the quiz
+    // Scroll to show the map when starting the quiz
     if (guessedCountries.length === 0) {
-      window.scrollTo(0, 0);
+      // Use a slight delay to ensure the DOM has updated
+      setTimeout(() => {
+        const mapContainer = document.querySelector('[data-map-container]');
+        if (mapContainer) {
+          mapContainer.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center',
+            inline: 'nearest'
+          });
+        } else {
+          // Fallback: scroll to a position that shows the map better
+          const headerHeight = 200; // Approximate header height
+          window.scrollTo({ 
+            top: headerHeight, 
+            behavior: 'smooth' 
+          });
+        }
+      }, 100);
     }
 
     setIsLoading(true);
@@ -963,7 +980,11 @@ function EnhancedMapCountryQuiz({
             </div>
           ) : (
             <>
-              <MapContainer style={mapStyles[mapType]} onClick={clickHandler}>
+              <MapContainer 
+                style={mapStyles[mapType]} 
+                onClick={clickHandler}
+                data-map-container
+              >
                 <MapComponent
                   guessedCountries={guessedCountries}
                   getCountryColor={getCountryColor}

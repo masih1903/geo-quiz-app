@@ -129,7 +129,7 @@ function MainLayout() {
           <NavLink to="/">
             <Logo src="/Atlaslogoblackcopy.png" alt="Atlas Logo" />
           </NavLink>
-          <BrandText>Atlas Quiz</BrandText>
+          <BrandText>GeoQuiz</BrandText>
         </LogoContainer>
         <Nav>
           <ul>
@@ -160,7 +160,7 @@ function MainLayout() {
       <ScrollToTop />
       <Outlet />
       <StyledFooter>
-        <p>© {new Date().getFullYear()} Atlas Quiz - Explore the World Through Geography</p>
+        <p>© {new Date().getFullYear()} GeoQuiz - Explore the World Through Geography</p>
       </StyledFooter>
     </Container>
   );
