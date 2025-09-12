@@ -6,7 +6,7 @@ function AsiaMapLow({ getCountryColor, onMouseOver }) {
       276.95001220703125 
       295.72991943359375 
       220.60986328125"
-      style={{ width: "100%", height: "auto", display: "block" }}
+      style={{ width: "100%", height: "75vh", display: "block" }}
       onMouseOver={onMouseOver}
       className="asia-map"
     >

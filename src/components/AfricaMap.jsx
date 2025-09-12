@@ -6,7 +6,7 @@ function AfricaMapLow({ getCountryColor, onMouseOver }) {
       350.2070007324219 
       220.31301879882812 
       217.08840942382812"
-      style={{ width: "100%", height: "auto", display: "block" }}
+      style={{ width: "100%", height: "75vh", display: "block" }}
       onMouseOver={onMouseOver}
       className="africa-map"
     >

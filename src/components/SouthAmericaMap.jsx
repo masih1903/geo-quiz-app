@@ -6,7 +6,7 @@ function SouthAmericaMap({ getCountryColor, onMouseOver }) {
       427.659912109375 
       250.5901641845703 
       225.130126953125"
-      style={{ width: "100%", height: "auto", display: "block" }}
+      style={{ width: "100%", height: "75vh", display: "block" }}
       onMouseOver={onMouseOver}
       className="southamerica-map"
     >

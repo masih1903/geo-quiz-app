@@ -6,7 +6,7 @@ function NorthAmericaMap({ getCountryColor, onMouseOver }) {
       268.14999389648438 
       167.68008422851562 
       177.07000732421875"
-      style={{ width: "100%", height: "auto", display: "block" }}
+      style={{ width: "100%", height: "75vh", display: "block" }}
       onMouseOver={onMouseOver}
       className="northamerica-map"
     >
