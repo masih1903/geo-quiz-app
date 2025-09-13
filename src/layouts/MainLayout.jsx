@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 import styled from "styled-components";
-import HomeIcon from "../components/SVGComponents/HomeIcon.jsx";
+import HomeIcon from "../components/svgComponents/HomeIcon.jsx";
 import ScrollToTop from "../components/UIComponents/ScrollToTop";
 
 const Container = styled.div`
