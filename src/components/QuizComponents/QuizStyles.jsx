@@ -121,9 +121,9 @@ export const Sidebar = styled.div`
   gap: var(--space-6);
   animation: ${fadeIn} 0.8s ease-out 0.2s both;
   position: sticky;
-  top: var(--space-6);
+  top: 6.5rem;
   align-self: flex-start;
-  max-height: calc(100vh - var(--space-12));
+  max-height: calc(100vh - 7rem);
   overflow-y: auto;
   
   @media (max-width: 1200px) {

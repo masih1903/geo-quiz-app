@@ -1,27 +1,20 @@
-import styled from "styled-components";
 import QuizOverview from "../../layouts/QuizOverview";
 import WorldIcon from "../../assets/worlds.png";
+import styled from "styled-components";
 import { useState, useEffect } from "react";
 
 const PageContainer = styled.div`
-  padding: var(--space-8) var(--space-4);
-  max-width: 1400px;
-  margin: 0 auto;
-  
-  @media (max-width: 768px) {
-    padding: var(--space-6) var(--space-3);
-  }
-`;
-
-const ContentGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-12);
+  gap: var(--space-8);
+  padding: var(--space-8);
+  min-height: 60vh;
   align-items: start;
-  
-  @media (max-width: 1024px) {
+
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: var(--space-8);
+    gap: var(--space-6);
+    padding: var(--space-4);
   }
 `;
 
@@ -33,54 +26,91 @@ const FactsSection = styled.div`
   border: 1px solid var(--gray-200);
 `;
 
+const FactsTitle = styled.h2`
+  font-family: var(--font-family-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    border-radius: var(--radius-sm);
+  }
+`;
+
+const FactsText = styled.div`
+  font-family: var(--font-family-sans);
+  font-size: var(--text-base);
+  line-height: 1.8;
+  color: var(--gray-700);
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  
+  @media (max-width: 768px) {
+    font-size: var(--text-sm);
+  }
+`;
+
 const QuizSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
+  gap: var(--space-6);
 `;
 
 const PageTitle = styled.h1`
   font-family: var(--font-family-display);
   font-size: var(--text-4xl);
   font-weight: 800;
-  color: var(--white);
-  margin: 0 0 var(--space-6) 0;
-  padding: var(--space-4) var(--space-8);
   background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-lg);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  margin: 0;
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-xl);
   transition: all var(--transition-normal);
+  cursor: pointer;
   position: relative;
-  overflow: hidden;
 
   &::before {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left var(--transition-slow);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    opacity: 0;
+    border-radius: var(--radius-xl);
+    transition: opacity var(--transition-normal);
+    z-index: -1;
   }
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-xl);
     
     &::before {
-      left: 100%;
+      opacity: 0.1;
     }
   }
 
   @media (max-width: 768px) {
     font-size: var(--text-3xl);
-    padding: var(--space-3) var(--space-6);
   }
 `;
 
-const WorldImage = styled.img`
+const ContinentImage = styled.img`
   width: 280px;
   height: 280px;
   object-fit: contain;
@@ -100,37 +130,9 @@ const WorldImage = styled.img`
   }
 `;
 
-const FactsText = styled.div`
-  font-family: var(--font-family-sans);
-  font-size: var(--text-base);
-  line-height: 1.8;
-  color: var(--gray-700);
-  text-align: left;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  
-  @media (max-width: 768px) {
-    font-size: var(--text-sm);
-  }
-`;
-
-const TypingCursor = styled.span`
-  display: inline-block;
-  width: 2px;
-  height: 1.2em;
-  background-color: var(--primary-color);
-  animation: blink 1s infinite;
-  margin-left: 2px;
-
-  @keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
-  }
-`;
-
 function World() {
+  const [hover, setHover] = useState(false);
   const [text, setText] = useState("");
-  const [isTypingComplete, setIsTypingComplete] = useState(false);
 
   const fullText = `- Did you know that in Norway, above the Arctic Circle, the sun does not set for about 76 days during the summer? It is called the Land of the Midnight Sun.
 
@@ -144,6 +146,7 @@ function World() {
 
   useEffect(() => {
     let index = 0;
+
     const interval = setInterval(() => {
       if (index < fullText.length) {
         const nextChar = fullText[index];
@@ -152,36 +155,35 @@ function World() {
         }
         index++;
       } else {
-        setIsTypingComplete(true);
         clearInterval(interval);
       }
-    }, 25);
+    }, 30);
 
     return () => clearInterval(interval);
   }, [fullText]);
 
   return (
     <PageContainer>
-      <ContentGrid>
-        <FactsSection>
-          <h2 className="fun-facts">Fun Facts About Our World</h2>
-          <FactsText>
-            {text}
-            {!isTypingComplete && <TypingCursor />}
-          </FactsText>
-        </FactsSection>
-        
-        <QuizSection>
-          <PageTitle>World Geography Quizzes</PageTitle>
-          <WorldImage src={WorldIcon} alt="World globe illustration" />
-          <QuizOverview
-            continent="World"
-            capitalPath="/world-capital-quiz"
-            countryPath="/world-country-quiz"
-            flagPath="/world-flag-quiz"
-          />
-        </QuizSection>
-      </ContentGrid>
+      <FactsSection className="fade-in-up">
+        <h2 className="fun-facts">Fun Facts About Our World</h2>
+        <FactsText>{text}</FactsText>
+      </FactsSection>
+      
+      <QuizSection className="fade-in-up">
+        <PageTitle
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
+        >
+          World Quizzes
+        </PageTitle>
+        <ContinentImage src={WorldIcon} alt="World icon" />
+        <QuizOverview
+          continent="World"
+          capitalPath="/world-capital-quiz"
+          countryPath="/world-country-quiz"
+          flagPath="/world-flag-quiz"
+        />
+      </QuizSection>
     </PageContainer>
   );
 }

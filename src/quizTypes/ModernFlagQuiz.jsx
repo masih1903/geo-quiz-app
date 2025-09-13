@@ -118,9 +118,13 @@ const Sidebar = styled.div`
   flex-direction: column;
   gap: var(--space-6);
   animation: ${fadeIn} 0.8s ease-out 0.4s both;
+  position: sticky;
+  top: 6.5rem;
+  align-self: flex-start;
   
   @media (max-width: 1024px) {
     order: -1;
+    position: static;
   }
 `;
 
