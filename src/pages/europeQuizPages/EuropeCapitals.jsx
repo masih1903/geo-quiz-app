@@ -1,4 +1,3 @@
-import React from "react";
 import ModernCapitalQuiz from "../../quizTypes/ModernCapitalQuiz";
 
 function EuropeCapitals() {

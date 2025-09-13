@@ -4,10 +4,8 @@ import {
   Route,
   createRoutesFromElements,
   RouterProvider,
-  Outlet,
 } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
-import ScrollToTop from "./components/uiComponents/ScrollToTop";
 import Home from "./pages/regionPages/Home";
 import World from "./pages/regionPages/World";
 import Europe from "./pages/regionPages/Europe";
