@@ -1,9 +1,9 @@
-import "../../App.css";
-import { useQuizState } from "../../hooks/useQuizState.jsx";
-import { useQuizTimer } from "../../hooks/useQuizTimer.jsx";
-import { useScrollPosition } from "../../hooks/useScrollPosition.jsx";
-import QuizSidebar from "../QuizComponents/QuizSidebar.jsx";
-import CompletionModal from "../QuizComponents/CompletionModal.jsx";
+import "../App.css";
+import { useQuizState } from "../hooks/useQuizState.jsx";
+import { useQuizTimer } from "../hooks/useQuizTimer.jsx";
+import { useScrollPosition } from "../hooks/useScrollPosition.jsx";
+import QuizSidebar from "../components/quizComponents/QuizSidebar.jsx";
+import CompletionModal from "../components/quizComponents/CompletionModal.jsx";
 import {
   QuizContainer,
   Header,
@@ -15,7 +15,7 @@ import {
   ActionButton,
   MapContainer,
   FloatingTooltip
-} from "../QuizComponents/QuizStyles.jsx";
+} from "../components/quizComponents/QuizStyles.jsx";
 
 function EnhancedMapCountryQuiz({
   regionApiUrl,

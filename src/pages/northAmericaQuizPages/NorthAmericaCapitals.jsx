@@ -1,5 +1,5 @@
 import React from "react";
-import ModernCapitalQuiz from "../../components/QuizPages/ModernCapitalQuiz";
+import ModernCapitalQuiz from "../../quizTypes/ModernCapitalQuiz";
 
 function NorthAmericaCapitals() {
   return (

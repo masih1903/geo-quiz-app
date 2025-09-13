@@ -1,6 +1,6 @@
 import React from "react";
-import EnhancedMapCountryQuiz from "../../components/QuizPages/EnhancedMapCountryQuiz";
-import NorthAmericaMap from "../../components/MapComponents/NorthAmericaMap";
+import EnhancedMapCountryQuiz from "../../quizTypes/EnhancedMapCountryQuiz";
+import NorthAmericaMap from "../../components/mapComponents/NorthAmericaMap";
 
 // Define the exact North American countries that are available on the map
 const NORTH_AMERICA_COUNTRIES = [

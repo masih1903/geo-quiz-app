@@ -1,5 +1,5 @@
-import ModernCapitalQuiz from "../QuizPages/ModernCapitalQuiz";
-import { API_ENDPOINTS } from "../../constants/apiConfig";
+import ModernCapitalQuiz from "../quizTypes/ModernCapitalQuiz";
+import { API_ENDPOINTS } from "../constants/apiConfig";
 
 function CapitalQuizWrapper({ continent, region }) {
   const apiUrl = API_ENDPOINTS[region];

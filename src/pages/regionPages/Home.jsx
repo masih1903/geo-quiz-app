@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import Card from "../../components/UIComponents/Card";
+import Card from "../../components/uiComponents/Card";
 
 const HomeContainer = styled.div`
   padding: var(--space-12) var(--space-4);

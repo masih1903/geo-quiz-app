@@ -1,5 +1,5 @@
 import React from "react";
-import ModernFlagQuiz from "../../components/QuizPages/ModernFlagQuiz";
+import ModernFlagQuiz from "../../quizTypes/ModernFlagQuiz";
 
 function NorthAmericaFlags() {
   return (
