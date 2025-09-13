@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
 import styled from "styled-components";
-import HomeIcon from "../SvgComponents/HomeIcon";
-import ScrollToTop from "../components/ScrollToTop";
+import HomeIcon from "../components/svgComponents/HomeIcon";
+import ScrollToTop from "../components/uiComponents/ScrollToTop";
 
 const Container = styled.div`
   display: flex;
