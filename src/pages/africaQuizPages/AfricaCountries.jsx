@@ -1,5 +1,5 @@
 import EnhancedMapCountryQuiz from "../../quizTypes/EnhancedMapCountryQuiz";
-import AfricaMap from "../../components/mapComponents/AfricaMap";
+import AfricaMap from "../../components/MapComponents/AfricaMap";
 
 function AfricaCountries() {
   return (

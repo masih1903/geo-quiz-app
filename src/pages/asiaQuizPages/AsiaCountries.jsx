@@ -1,5 +1,5 @@
 import EnhancedMapCountryQuiz from "../../quizTypes/EnhancedMapCountryQuiz";
-import AsiaMap from "../../components/mapComponents/AsiaMap";
+import AsiaMap from "../../components/MapComponents/AsiaMap";
 
 function AsiaCountries() {
   return (

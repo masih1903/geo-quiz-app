@@ -1,5 +1,5 @@
 import EnhancedMapCountryQuiz from "../../quizTypes/EnhancedMapCountryQuiz";
-import SouthAmericaMap from "../../components/mapComponents/SouthAmericaMap";
+import SouthAmericaMap from "../../components/MapComponents/SouthAmericaMap";
 
 // Define the exact South American countries that are available on the map
 const SOUTH_AMERICA_COUNTRIES = [

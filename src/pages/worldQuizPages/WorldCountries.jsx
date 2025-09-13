@@ -1,5 +1,5 @@
 import EnhancedMapCountryQuiz from "../../quizTypes/EnhancedMapCountryQuiz";
-import WorldMap from "../../components/mapComponents/WorldMap";
+import WorldMap from "../../components/MapComponents/WorldMap";
 
 function WorldCountries() {
   return (
