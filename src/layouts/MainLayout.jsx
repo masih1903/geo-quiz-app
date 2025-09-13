@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 import styled from "styled-components";
-import HomeIcon from "../components/SVGComponents/HomeIcon";
+import HomeIcon from "../components/SVGComponents/HomeIcon.jsx";
 import ScrollToTop from "../components/UIComponents/ScrollToTop";
 
 const Container = styled.div`
@@ -134,7 +134,7 @@ function MainLayout() {
         <Nav>
           <ul>
             <li>
-              <NavLink to="/">{HomeIcon}</NavLink>
+              <NavLink to="/"><HomeIcon /></NavLink>
             </li>
             <li>
               <NavLink to="/world">World</NavLink>
