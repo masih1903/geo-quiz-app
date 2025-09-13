@@ -1,4 +1,4 @@
-import ModernFlagQuiz from "../ModernFlagQuiz";
+import ModernFlagQuiz from "../QuizPages/ModernFlagQuiz";
 import { API_ENDPOINTS } from "../../constants/apiConfig";
 
 function FlagQuizWrapper({ continent, region }) {

@@ -7,7 +7,7 @@ import {
   Outlet,
 } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
-import ScrollToTop from "./components/ScrollToTop";
+import ScrollToTop from "./components/UIComponents/ScrollToTop";
 import Home from "./pages/Home";
 import World from "./pages/World";
 import Europe from "./pages/Europe";

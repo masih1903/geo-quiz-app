@@ -1,4 +1,4 @@
-import ModernCapitalQuiz from "../../components/ModernCapitalQuiz";
+import ModernCapitalQuiz from "../../components/QuizPages/ModernCapitalQuiz";
 
 function AfricaCapitals() {
   return (

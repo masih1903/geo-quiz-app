@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import WorldLogo from "../assets/world.png";
+import WorldLogo from "../../assets/world.png";
 
 const CardContainer = styled.div`
   background: var(--white);

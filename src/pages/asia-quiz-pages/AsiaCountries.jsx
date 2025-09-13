@@ -1,6 +1,6 @@
 import React from "react";
-import EnhancedMapCountryQuiz from "../../components/EnhancedMapCountryQuiz";
-import AsiaMap from "../../components/AsiaMap";
+import EnhancedMapCountryQuiz from "../../components/QuizPages/EnhancedMapCountryQuiz";
+import AsiaMap from "../../components/MapComponents/AsiaMap";
 
 function AsiaCountries() {
   return (

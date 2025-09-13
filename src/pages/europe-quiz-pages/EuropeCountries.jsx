@@ -1,6 +1,6 @@
 import React from "react";
-import EnhancedMapCountryQuiz from "../../components/EnhancedMapCountryQuiz";
-import EuropeMap from "../../components/EuropeMap";
+import EnhancedMapCountryQuiz from "../../components/QuizPages/EnhancedMapCountryQuiz";
+import EuropeMap from "../../components/MapComponents/EuropeMap";
 
 function EuropeCountries() {
   return (

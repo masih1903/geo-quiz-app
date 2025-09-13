@@ -1,4 +1,4 @@
-import ModernFlagQuiz from "../../components/ModernFlagQuiz";
+import ModernFlagQuiz from "../../components/QuizPages/ModernFlagQuiz";
 
 function EuropeFlags() {
   return (

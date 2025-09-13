@@ -1,6 +1,6 @@
 import React from "react";
-import EnhancedMapCountryQuiz from "../../components/EnhancedMapCountryQuiz";
-import SouthAmericaMap from "../../components/SouthAmericaMap";
+import EnhancedMapCountryQuiz from "../../components/QuizPages/EnhancedMapCountryQuiz";
+import SouthAmericaMap from "../../components/MapComponents/SouthAmericaMap";
 
 // Define the exact South American countries that are available on the map
 const SOUTH_AMERICA_COUNTRIES = [
