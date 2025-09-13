@@ -1,4 +1,3 @@
-import "../App.css";
 import { useQuizState } from "../hooks/useQuizState.jsx";
 import { useQuizTimer } from "../hooks/useQuizTimer.jsx";
 import { useScrollPosition } from "../hooks/useScrollPosition.jsx";
