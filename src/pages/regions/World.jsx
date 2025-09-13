@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import QuizOverview from "../layouts/QuizOverview";
-import WorldIcon from "../assets/worlds.png";
+import QuizOverview from "../../layouts/QuizOverview";
+import WorldIcon from "../../assets/worlds.png";
 import { useState, useEffect } from "react";
 
 const PageContainer = styled.div`

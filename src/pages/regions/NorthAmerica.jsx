@@ -1,5 +1,5 @@
-import QuizOverview from "../layouts/QuizOverview";
-import WorldIcon from "../assets/worlds.png";
+import QuizOverview from "../../layouts/QuizOverview";
+import WorldIcon from "../../assets/worlds.png";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
@@ -130,15 +130,17 @@ const ContinentImage = styled.img`
   }
 `;
 
-function Asia() {
+function NorthAmerica() {
   const [hover, setHover] = useState(false);
   const [text, setText] = useState("");
 
-  const fullText = `- Did you know that Asia is the largest continent in the world, covering about 44.58 million square kilometers, which is almost 30% of the Earth's total land area?
+  const fullText = `- Did you know that North America is the third-largest continent in the world, covering about 24.71 million square kilometers (9.54 million square miles)?
 
-- Did you know that Japan has more than 6,800 islands, making it one of the countries with the most islands in the world?
+- Did you know that Canada has the longest coastline in the world, stretching over 202,080 kilometers (125,567 miles)?
 
-- Did you know that the world's longest train route, the Trans-Siberian Railway, is located in Asia? It spans 9,289 kilometers (5,772 miles) across Russia.`;
+- Did you know that the Great Lakes in North America contain about 20% of the world's surface freshwater?
+
+- Did you know that the Grand Canyon in the United States is so massive it can be seen from space and stretches 446 kilometers (277 miles) long?`;
 
   useEffect(() => {
     let index = 0;
@@ -161,7 +163,7 @@ function Asia() {
   return (
     <PageContainer>
       <FactsSection className="fade-in-up">
-        <h2 className="fun-facts">Fun Facts About Asia</h2>
+        <h2 className="fun-facts">Fun Facts About North America</h2>
         <FactsText>{text}</FactsText>
       </FactsSection>
       
@@ -170,18 +172,18 @@ function Asia() {
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
-          Asia Quizzes
+          North America Quizzes
         </PageTitle>
-        <ContinentImage src={WorldIcon} alt="Asia icon" />
+        <ContinentImage src={WorldIcon} alt="North America icon" />
         <QuizOverview
-          continent="Asia"
-          capitalPath="/asia-capital-quiz"
-          countryPath="/asia-country-quiz"
-          flagPath="/asia-flag-quiz"
+          continent="North America"
+          capitalPath="/north-america-capital-quiz"
+          countryPath="/north-america-country-quiz"
+          flagPath="/north-america-flag-quiz"
         />
       </QuizSection>
     </PageContainer>
   );
 }
 
-export default Asia;
+export default NorthAmerica;

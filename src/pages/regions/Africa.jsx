@@ -1,5 +1,5 @@
-import QuizOverview from "../layouts/QuizOverview";
-import WorldIcon from "../assets/worlds.png";
+import QuizOverview from "../../layouts/QuizOverview";
+import WorldIcon from "../../assets/worlds.png";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
@@ -130,17 +130,17 @@ const ContinentImage = styled.img`
   }
 `;
 
-function NorthAmerica() {
+function Africa() {
   const [hover, setHover] = useState(false);
   const [text, setText] = useState("");
 
-  const fullText = `- Did you know that North America is the third-largest continent in the world, covering about 24.71 million square kilometers (9.54 million square miles)?
+  const fullText = `- Did you know that Africa is home to the Sahara Desert, the largest hot desert in the world, which is roughly the size of the United States?
 
-- Did you know that Canada has the longest coastline in the world, stretching over 202,080 kilometers (125,567 miles)?
+- Did you know that the Nile River, which flows through 11 countries, is the longest river in the world, stretching over 6,650 kilometers (4,130 miles)?
 
-- Did you know that the Great Lakes in North America contain about 20% of the world's surface freshwater?
+- Did you know that Madagascar is home to 90% of the world's lemurs, which are found nowhere else on Earth?
 
-- Did you know that the Grand Canyon in the United States is so massive it can be seen from space and stretches 446 kilometers (277 miles) long?`;
+- Did you know that Africa has 54 recognized countries, making it the continent with the most nations?`;
 
   useEffect(() => {
     let index = 0;
@@ -163,7 +163,7 @@ function NorthAmerica() {
   return (
     <PageContainer>
       <FactsSection className="fade-in-up">
-        <h2 className="fun-facts">Fun Facts About North America</h2>
+        <h2 className="fun-facts">Fun Facts About Africa</h2>
         <FactsText>{text}</FactsText>
       </FactsSection>
       
@@ -172,18 +172,18 @@ function NorthAmerica() {
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
-          North America Quizzes
+          Africa Quizzes
         </PageTitle>
-        <ContinentImage src={WorldIcon} alt="North America icon" />
+        <ContinentImage src={WorldIcon} alt="Africa icon" />
         <QuizOverview
-          continent="North America"
-          capitalPath="/north-america-capital-quiz"
-          countryPath="/north-america-country-quiz"
-          flagPath="/north-america-flag-quiz"
+          continent="Africa"
+          capitalPath="/africa-capital-quiz"
+          countryPath="/africa-country-quiz"
+          flagPath="/africa-flag-quiz"
         />
       </QuizSection>
     </PageContainer>
   );
 }
 
-export default NorthAmerica;
+export default Africa;

@@ -1,5 +1,5 @@
-import QuizOverview from "../layouts/QuizOverview";
-import WorldIcon from "../assets/worlds.png";
+import QuizOverview from "../../layouts/QuizOverview";
+import WorldIcon from "../../assets/worlds.png";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
@@ -130,17 +130,15 @@ const ContinentImage = styled.img`
   }
 `;
 
-function Europe() {
+function Asia() {
   const [hover, setHover] = useState(false);
   const [text, setText] = useState("");
 
-  const fullText = `- Did you know that the Eiffel Tower in Paris grows taller in the summer? The metal expands in the heat, making it about 15 cm (6 inches) taller!
+  const fullText = `- Did you know that Asia is the largest continent in the world, covering about 44.58 million square kilometers, which is almost 30% of the Earth's total land area?
 
-- Did you know that Iceland has no mosquitoes? Despite its mild summers, the country is entirely mosquito-free.
+- Did you know that Japan has more than 6,800 islands, making it one of the countries with the most islands in the world?
 
-- Did you know that Europe is home to the world's oldest sovereign state? San Marino, founded in 301 AD, claims to be the oldest republic in the world.
-
-- Did you know that Finland has over 188,000 lakes, making it the country with the most lakes in Europe?`;
+- Did you know that the world's longest train route, the Trans-Siberian Railway, is located in Asia? It spans 9,289 kilometers (5,772 miles) across Russia.`;
 
   useEffect(() => {
     let index = 0;
@@ -163,7 +161,7 @@ function Europe() {
   return (
     <PageContainer>
       <FactsSection className="fade-in-up">
-        <h2 className="fun-facts">Fun Facts About Europe</h2>
+        <h2 className="fun-facts">Fun Facts About Asia</h2>
         <FactsText>{text}</FactsText>
       </FactsSection>
       
@@ -172,18 +170,18 @@ function Europe() {
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
-          Europe Quizzes
+          Asia Quizzes
         </PageTitle>
-        <ContinentImage src={WorldIcon} alt="Europe icon" />
+        <ContinentImage src={WorldIcon} alt="Asia icon" />
         <QuizOverview
-          continent="Europe"
-          capitalPath="/europe-capital-quiz"
-          countryPath="/europe-country-quiz"
-          flagPath="/europe-flag-quiz"
+          continent="Asia"
+          capitalPath="/asia-capital-quiz"
+          countryPath="/asia-country-quiz"
+          flagPath="/asia-flag-quiz"
         />
       </QuizSection>
     </PageContainer>
   );
 }
 
-export default Europe;
+export default Asia;

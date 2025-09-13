@@ -1,5 +1,5 @@
-import QuizOverview from "../layouts/QuizOverview";
-import WorldIcon from "../assets/worlds.png";
+import QuizOverview from "../../layouts/QuizOverview";
+import WorldIcon from "../../assets/worlds.png";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
@@ -130,17 +130,17 @@ const ContinentImage = styled.img`
   }
 `;
 
-function Africa() {
+function SouthAmerica() {
   const [hover, setHover] = useState(false);
   const [text, setText] = useState("");
 
-  const fullText = `- Did you know that Africa is home to the Sahara Desert, the largest hot desert in the world, which is roughly the size of the United States?
+  const fullText = `- Did you know that South America is home to the Amazon Rainforest, the largest rainforest in the world, covering over 5.5 million square kilometers (2.1 million square miles)?
 
-- Did you know that the Nile River, which flows through 11 countries, is the longest river in the world, stretching over 6,650 kilometers (4,130 miles)?
+- Did you know that Argentina is home to the Tango, a world-famous dance that originated in the streets of Buenos Aires in the late 19th century?
 
-- Did you know that Madagascar is home to 90% of the world's lemurs, which are found nowhere else on Earth?
+- Did you know that Uruguay was the first country in the world to legalize the production, sale, and consumption of recreational cannabis?
 
-- Did you know that Africa has 54 recognized countries, making it the continent with the most nations?`;
+- Did you know that South America is home to the Atacama Desert in Chile, the driest non-polar desert in the world, with some areas having never recorded rainfall?`;
 
   useEffect(() => {
     let index = 0;
@@ -163,7 +163,7 @@ function Africa() {
   return (
     <PageContainer>
       <FactsSection className="fade-in-up">
-        <h2 className="fun-facts">Fun Facts About Africa</h2>
+        <h2 className="fun-facts">Fun Facts About South America</h2>
         <FactsText>{text}</FactsText>
       </FactsSection>
       
@@ -172,18 +172,18 @@ function Africa() {
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
-          Africa Quizzes
+          South America Quizzes
         </PageTitle>
-        <ContinentImage src={WorldIcon} alt="Africa icon" />
+        <ContinentImage src={WorldIcon} alt="South America icon" />
         <QuizOverview
-          continent="Africa"
-          capitalPath="/africa-capital-quiz"
-          countryPath="/africa-country-quiz"
-          flagPath="/africa-flag-quiz"
+          continent="South America"
+          capitalPath="/south-america-capital-quiz"
+          countryPath="/south-america-country-quiz"
+          flagPath="/south-america-flag-quiz"
         />
       </QuizSection>
     </PageContainer>
   );
 }
 
-export default Africa;
+export default SouthAmerica;

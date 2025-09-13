@@ -1,5 +1,5 @@
-import QuizOverview from "../layouts/QuizOverview";
-import WorldIcon from "../assets/worlds.png";
+import QuizOverview from "../../layouts/QuizOverview";
+import WorldIcon from "../../assets/worlds.png";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
@@ -130,17 +130,17 @@ const ContinentImage = styled.img`
   }
 `;
 
-function SouthAmerica() {
+function Europe() {
   const [hover, setHover] = useState(false);
   const [text, setText] = useState("");
 
-  const fullText = `- Did you know that South America is home to the Amazon Rainforest, the largest rainforest in the world, covering over 5.5 million square kilometers (2.1 million square miles)?
+  const fullText = `- Did you know that the Eiffel Tower in Paris grows taller in the summer? The metal expands in the heat, making it about 15 cm (6 inches) taller!
 
-- Did you know that Argentina is home to the Tango, a world-famous dance that originated in the streets of Buenos Aires in the late 19th century?
+- Did you know that Iceland has no mosquitoes? Despite its mild summers, the country is entirely mosquito-free.
 
-- Did you know that Uruguay was the first country in the world to legalize the production, sale, and consumption of recreational cannabis?
+- Did you know that Europe is home to the world's oldest sovereign state? San Marino, founded in 301 AD, claims to be the oldest republic in the world.
 
-- Did you know that South America is home to the Atacama Desert in Chile, the driest non-polar desert in the world, with some areas having never recorded rainfall?`;
+- Did you know that Finland has over 188,000 lakes, making it the country with the most lakes in Europe?`;
 
   useEffect(() => {
     let index = 0;
@@ -163,7 +163,7 @@ function SouthAmerica() {
   return (
     <PageContainer>
       <FactsSection className="fade-in-up">
-        <h2 className="fun-facts">Fun Facts About South America</h2>
+        <h2 className="fun-facts">Fun Facts About Europe</h2>
         <FactsText>{text}</FactsText>
       </FactsSection>
       
@@ -172,18 +172,18 @@ function SouthAmerica() {
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
-          South America Quizzes
+          Europe Quizzes
         </PageTitle>
-        <ContinentImage src={WorldIcon} alt="South America icon" />
+        <ContinentImage src={WorldIcon} alt="Europe icon" />
         <QuizOverview
-          continent="South America"
-          capitalPath="/south-america-capital-quiz"
-          countryPath="/south-america-country-quiz"
-          flagPath="/south-america-flag-quiz"
+          continent="Europe"
+          capitalPath="/europe-capital-quiz"
+          countryPath="/europe-country-quiz"
+          flagPath="/europe-flag-quiz"
         />
       </QuizSection>
     </PageContainer>
   );
 }
 
-export default SouthAmerica;
+export default Europe;
