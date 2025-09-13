@@ -50,7 +50,6 @@ function SouthAmericaMap({ getCountryColor, onMouseOver }) {
         id="FK"
         title="Falkland Islands"
         className={`filler_country ${getCountryColor("fk")}`}
-        class="filler_country"
         d="M303.66,633.13L307.02,630.44L309.41,631.56L311.09,629.77L313.33,631.78L312.49,633.36L308.7,634.72L307.44,633.13L305.06,635.18z"
       />
       <path

@@ -416,6 +416,7 @@ function EnhancedMapCountryQuiz({
   mapComponent: MapComponent,
   title,
   mapType,
+  countryFilter,
 }) {
   const [countries, setCountries] = useState([]);
   const [currentCountry, setCurrentCountry] = useState(null);
@@ -451,13 +452,22 @@ function EnhancedMapCountryQuiz({
     fetch(regionApiUrl)
       .then((response) => response.json())
       .then((data) => {
-        const countryList = data
+        let countryList = data
           .filter((country) => country.independent === true)
           .map((country) => ({
             name: country.name.common,
             capital: country.capital ? country.capital[0] : null,
             cca2: country.cca2.toLowerCase(),
           }));
+        
+        // Apply country filter if provided
+        if (countryFilter) {
+          countryList = countryFilter(countryList);
+        }
+        
+        // Debug: Log the filtered countries to console
+        console.log('Filtered countries:', countryList.map(c => `${c.name} (${c.cca2})`));
+        
         setCountries(countryList);
       })
       .catch((error) => {
@@ -466,7 +476,7 @@ function EnhancedMapCountryQuiz({
       .finally(() => {
         setIsLoading(false);
       });
-  }, [regionApiUrl]);
+  }, [regionApiUrl, countryFilter]);
 
 
   const resetQuiz = () => {
