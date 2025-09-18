@@ -38,9 +38,10 @@ const CardContainer = styled.div`
   }
 
   @media (max-width: 768px) {
-    margin: var(--space-3);
+    margin: 0 var(--space-1) 0 var(--space-3);
     padding: var(--space-6);
     max-width: 100%;
+    width: calc(100% - var(--space-8));
   }
 `;
 

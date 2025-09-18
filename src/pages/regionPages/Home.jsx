@@ -60,6 +60,9 @@ const CardsGrid = styled.div`
     grid-template-columns: 1fr;
     grid-template-rows: repeat(6, 1fr);
     gap: var(--space-4);
+    padding: 0 var(--space-3);
+    justify-items: center;
+    align-items: start;
   }
 `;
 
