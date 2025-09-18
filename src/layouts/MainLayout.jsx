@@ -161,7 +161,7 @@ function MainLayout() {
       <ScrollToTop />
       <Outlet />
       <StyledFooter>
-        <p>© {new Date().getFullYear()} GeoQuiz - Explore the World Through Geography</p>
+        <p>© {new Date().getFullYear()} MK GeoQuiz - Explore the World Through Geography</p>
       </StyledFooter>
     </Container>
   );
