@@ -89,14 +89,14 @@ const StyledFooter = styled.footer`
 `;
 
 const Logo = styled.img`
-  height: 4rem;
+  height: 3rem;
   cursor: pointer;
   transition: all var(--transition-normal);
   border-radius: var(--radius-lg);
+  transform: translateY(16px) scale(1.7);
 
   &:hover {
-    transform: scale(1.05);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(16px) scale(1.785);
   }
 
   @media (max-width: 768px) {
@@ -115,6 +115,7 @@ const BrandText = styled.span`
   font-size: var(--text-xl);
   font-weight: 700;
   color: var(--gray-900);
+  margin-left: 10px;
   
   @media (max-width: 768px) {
     font-size: var(--text-lg);
@@ -127,7 +128,7 @@ function MainLayout() {
       <StyledHeader>
         <LogoContainer>
           <NavLink to="/">
-            <Logo src="/Atlaslogoblackcopy.png" alt="Atlas Logo" />
+            <Logo src="/mk.png" alt="Atlas Logo" />
           </NavLink>
           <BrandText>GeoQuiz</BrandText>
         </LogoContainer>
